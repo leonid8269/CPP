@@ -33,82 +33,72 @@ void organizationShips(char map[][10]){
         statusMap(map);
         int verticalOne = 0, horizonOne = 0;        // добавил внутрь цикла тчобы каждую итерацию они обнулялись
         int verticalTwo = 0, horizonTwo = 0;
-
+//_______________________________________________________________________________________________
         if (count < 4) { // расстановка одно-палубных
             cout << "It remains to put " << 4 - count << " single-deck!\n";
             do {
                 cout << "Enter coordinate (horizontal and vertical)\n";
                 cin >> horizonOne >> verticalOne;
-                map[verticalOne][horizonOne] == '.' ? (map[verticalOne][horizonOne] = '@') : --count;
+                if (map[verticalOne][horizonOne] != '.') {
+                    --count;
+                    cout << "Not excellent! Try again!\n\a";
+                }else {
+                    (map[verticalOne][horizonOne] = '@');
+                    cout << "Excellent!\n";
+                }
                 break;
             }while(true);
         }
+
+//_______________________________________________________________________________________________
         else if (count < 7 ) { // Расстановка 2-х палубных кораблей)
             cout << "It remains to put " << 7 - count << " double-deck!\n";
-                do{
-                    cout << "Enter coordinate first point double-ship. (Horizontal and vertical)\n";
-                    cin >> horizonOne >> verticalOne;
+            do{
+                cout << "Enter coordinate first point double-ship. (Horizontal and vertical)\n";
+                cin >> horizonOne >> verticalOne;
 
-                    if (map[verticalOne][horizonOne] == '.'){
-                        cout << "Excellent! It's time to mark the second point!\n";
-                    }else {
-                        --count;
-                        cout << "Not excellent! Try again!\n\a";
-                        break;
-                    }
-                    cout << "Enter coordinate second point double-ship. (Horizontal and vertical)\n";
-                    cin >> horizonTwo >> verticalTwo;
+                if (map[verticalOne][horizonOne] != '.'){
 
-                    if((map[verticalTwo][horizonTwo] == '.') && ((horizonTwo == horizonOne &&
-                            verticalTwo == (verticalOne + 1)) || (horizonTwo == horizonOne &&
-                            verticalTwo == (verticalOne - 1)) || (horizonTwo == (horizonOne - 1) &&
-                            verticalOne == verticalTwo) || (horizonTwo == (horizonOne + 1) &&
-                            verticalOne == verticalTwo))){
-                        map[verticalOne][horizonOne] = '@';
-                        map[verticalTwo][horizonTwo] = '@';
-                        cout << "Excellent!!\n";
-                        break;
-                    }else {
-                        cout << "Not excellent, try again!\n\a";
-                        --count;
-                        break;
-                    }
-                }while (true);
+                    --count;
+                    cout << "Not excellent! Try again!\n\a";
+                    break;
+                }else {
+                    cout << "Excellent! It's time to mark the second point!\n";
+                }
+                cout << "Enter coordinate second point double-ship. (Horizontal and vertical)\n";
+                cin >> horizonTwo >> verticalTwo;
 
+                // придумать цикл который будет проходить
 
+            }while (true);
+
+//_______________________________________________________________________________________________
         }else if (count < 9) { // расстановка 3-х палубных
             cout << "It remains to put " << 9 - count << " three-deck!\n";
 
-                do{
-                    cout << "Enter coordinate first point three-ship. (Horizontal and vertical)\n";
-                    cin >> horizonOne >> verticalOne;
+            do{
+                cout << "Enter coordinate first point three-ship. (Horizontal and vertical)\n";
+                cin >> horizonOne >> verticalOne;
 
-                    if (map[verticalOne][horizonOne] == '.'){
-                        cout << "Excellent! It's time to mark the END point!\n";
-                    }else {
-                        --count;
-                        cout << "Not excellent! Try again!\n\a";
-                        break;
-                    }
+                if (map[verticalOne][horizonOne] != '.'){
+                    --count;
+                    cout << "Not excellent! Try again!\n\a";
+                    break;
+                }else {
+                    cout << "Excellent! It's time to mark the END point!\n";
+                }
 
-                    cout << "Enter coordinate END point three-ship. (Horizontal and vertical)\n";
-                    cin >> horizonTwo >> verticalTwo;
+                cout << "Enter coordinate END point three-ship. (Horizontal and vertical)\n";
+                cin >> horizonTwo >> verticalTwo;
 
-                    if (map[verticalTwo][horizonTwo] == '@') {
-                        cout << "NOT excellent, try again!\n\a";
-                        -- count;
-                        break;
+                   // нужен цикл
 
-                    }else {
-
-                        // застрял тут!
-
-                    }
-                }while(true);
+                }
+            }while(true);
 
 
 
-
+//_______________________________________________________________________________________________
         }else {
             cout << "It remains to put " << 10 - count << " four-deck!\n";
 

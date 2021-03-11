@@ -76,7 +76,7 @@ void processGame (bool arr[][12]){
 
     } else if (coordinate1 == coordinate3) { // 3 вариант вертикальный
         if (coordinate4 > coordinate2){
-            coordinate3 += coordinate2;
+            coordinate4 += coordinate2;
             coordinate2 = coordinate4 - coordinate2;
             coordinate4 -= coordinate2;
         }
