@@ -33,9 +33,13 @@ bool checkingTheRange(int a, int b){
     else return false;
 }
 
-bool checkDeck(int a, int  b, int c){
-    if ((horizonOne != horizonTwo + 1 || horizonOne != horizonTwo - 1)  ||
-        (verticalOne != verticalTwo +1 || verticalOne != verticalTwo - 1))
+bool checkDeck(int horizonOne, int  horizonTwo, int verticalOne ,int verticalTwo ,int magnificationStep){
+    if ((horizonOne != horizonTwo + magnificationStep || horizonOne != horizonTwo - magnificationStep)  ||
+        (verticalOne != verticalTwo + magnificationStep || verticalOne != verticalTwo - magnificationStep)){
+        return true;
+    } else return false;
+
+
 }
 
 
@@ -99,8 +103,7 @@ void organizationShips(char map[][10]){
                 }
 
 
-                if ((horizonOne != horizonTwo + 1 || horizonOne != horizonTwo - 1)  ||
-                        (verticalOne != verticalTwo +1 || verticalOne != verticalTwo - 1)) {
+                if (!(checkDeck(horizonOne,horizonTwo,verticalOne,verticalTwo,1))) {
                     --count;
                     cout << "Not excellent! Try again!\n\a";
                     break;
