@@ -33,15 +33,31 @@ bool checkingTheRange(int a, int b){
     else return false;
 }
 
-bool checkDeck(int horizonOne, int  horizonTwo, int verticalOne ,int verticalTwo ,int magnificationStep){
-    if ((horizonOne != horizonTwo + magnificationStep || horizonOne != horizonTwo - magnificationStep)  ||
-        (verticalOne != verticalTwo + magnificationStep || verticalOne != verticalTwo - magnificationStep)){
-        return true;
-    } else return false;
+bool checkDeck(int horizonOne, int horizonTwo, int verticalOne ,int verticalTwo ,int magnificationStep){
+    if (horizonOne == horizonTwo){
+        if ((verticalOne == verticalTwo + magnificationStep)
+            || (verticalOne == verticalTwo - magnificationStep))  return true;
+        else return false;
+
+    } else if (verticalOne == verticalTwo){
+        if ((horizonOne == horizonTwo + magnificationStep)
+            || (horizonOne == horizonTwo - magnificationStep)) return true;
+        else return false;
+
+    }else return false;
 
 
 }
+void substitute(int& first, int& second){
+    first += second;
+    second = first - second;
+    first -= second;
 
+}
+void stopClear(){
+    system("pause");
+    system("cls");
+}
 
 void organizationShips(char map[][10]){
     for (int count = 0; count < 10; ++ count){
@@ -54,6 +70,7 @@ void organizationShips(char map[][10]){
             do {
                 cout << "Enter coordinate (horizontal and vertical)\n";
                 cin >> horizonOne >> verticalOne;
+
                 if (!(checkingTheRange(horizonOne, verticalOne))){
                     --count;
                     cout << "Enter the correct coordinates!! Try again!\n\a";
@@ -74,7 +91,6 @@ void organizationShips(char map[][10]){
 //_______________________________________________________________________________________________
         else if (count < 7 ) { // Расстановка 2-х палубных кораблей)
             cout << "It remains to put " << 7 - count << " double-deck!\n";
-
             bool stop;
             do{
                 stop = true;
@@ -92,16 +108,15 @@ void organizationShips(char map[][10]){
                     break;
                 }else {
 
-                    cout << "Excellent! It's time to mark the second point!\n";
+                    cout << "Excellent! It's time to mark the END point!\n";
                 }
-                cout << "Enter coordinate second point double-ship. (Horizontal and vertical)\n";
+                cout << "Enter coordinate END point double-ship. (Horizontal and vertical)\n";
                 cin >> horizonTwo >> verticalTwo;
                 if (!(checkingTheRange(horizonTwo, verticalTwo))){
                     --count;
                     cout << "Enter the correct coordinates!! Try again!\n\a";
                     break;
                 }
-
 
                 if (!(checkDeck(horizonOne,horizonTwo,verticalOne,verticalTwo,1))) {
                     --count;
@@ -111,9 +126,7 @@ void organizationShips(char map[][10]){
 
                 if (horizonTwo == horizonOne) {
                     if (verticalOne > verticalTwo){
-                        verticalOne += verticalTwo;
-                        verticalTwo = verticalOne - verticalTwo;
-                        verticalOne -= verticalTwo;
+                        substitute(verticalOne,verticalTwo);
                     }
 
                     for(int i = verticalOne ; i <= verticalTwo; ++i){
@@ -123,15 +136,18 @@ void organizationShips(char map[][10]){
                             cout << "Not excellent! Try again!\n\a";
                             break;
                         }
-                        map[i][horizonOne] = '@';
                     }
+
+                    if (stop){
+                        for(int i = verticalOne ; i <= verticalTwo; ++i){
+                            map[i][horizonOne] = '@';
+                            }
+                        }
                     break;
 
                 }else if (verticalTwo == verticalOne){
                     if (horizonOne > horizonTwo){
-                        horizonOne += horizonTwo;
-                        horizonTwo = horizonOne - horizonTwo;
-                        horizonOne -= horizonTwo;
+                        substitute(horizonOne, horizonTwo);
                     }
                     for( ; horizonOne <= horizonTwo ; ++ horizonOne){
                         if (map[verticalOne][horizonOne] == '@'){
@@ -140,36 +156,41 @@ void organizationShips(char map[][10]){
                             cout << "Not excellent! Try again!\n\a";
                             break;
                         }
-                        map[verticalOne][horizonOne] = '@';
+                    }
+
+                    if (stop){
+                        for(int i = verticalOne ; i <= verticalTwo; ++i){
+                            map[i][horizonOne] = '@';
+                        }
                     }
                     break;
                 }
 
-
-
-            }while (stop);
+            }while (true);
 
 //_______________________________________________________________________________________________
         }else if (count < 9) { // расстановка 3-х палубных
             cout << "It remains to put " << 9 - count << " three-deck!\n";
 
+            bool stop;
             do{
+                stop = true;
                 cout << "Enter coordinate first point three-ship. (Horizontal and vertical)\n";
                 cin >> horizonOne >> verticalOne;
-                if (!(checkingTheRange(horizonOne, verticalOne))){
+                if (!(checkingTheRange(horizonOne, verticalOne))) {
                     --count;
                     cout << "Enter the correct coordinates!! Try again!\n\a";
                     break;
                 }
 
-                if (map[verticalOne][horizonOne] != '.'){
+                if (map[verticalOne][horizonOne] == '@'){
                     --count;
                     cout << "Not excellent! Try again!\n\a";
                     break;
                 }else {
+
                     cout << "Excellent! It's time to mark the END point!\n";
                 }
-
                 cout << "Enter coordinate END point three-ship. (Horizontal and vertical)\n";
                 cin >> horizonTwo >> verticalTwo;
                 if (!(checkingTheRange(horizonTwo, verticalTwo))){
@@ -178,21 +199,145 @@ void organizationShips(char map[][10]){
                     break;
                 }
 
-                   // нужен цикл
+                if (!(checkDeck(horizonOne,horizonTwo,verticalOne,verticalTwo,2))) {
+                    --count;
+                    cout << "Not excellent! Try again!\n\a";
+                    break;
+                }
 
+                if (horizonTwo == horizonOne) {
+                    if (verticalOne > verticalTwo){
+                        substitute(verticalOne,verticalTwo);
+                    }
 
-            }while(true);
+                    for(int i = verticalOne ; i <= verticalTwo; ++i){
+                        if (map[i][horizonOne] == '@'){
+                            stop = false;
+                            --count;
+                            cout << "Not excellent! Try again!\n\a";
+                            break;
+                        }
+                    }
 
+                    if (stop){
+                        for(int i = verticalOne ; i <= verticalTwo; ++i){
+                            map[i][horizonOne] = '@';
+                        }
+                    }
+                    break;
 
+                }else if (verticalTwo == verticalOne){
+                    if (horizonOne > horizonTwo){
+                        substitute(horizonOne, horizonTwo);
+                    }
+                    for( ; horizonOne <= horizonTwo ; ++ horizonOne){
+                        if (map[verticalOne][horizonOne] == '@'){
+                            stop = false;
+                            --count;
+                            cout << "Not excellent! Try again!\n\a";
+                            break;
+                        }
+                    }
+
+                    if (stop){
+                        for(int i = verticalOne ; i <= verticalTwo; ++i){
+                            map[i][horizonOne] = '@';
+                        }
+                    }
+                    break;
+                }
+
+            }while (true);
 
 //_______________________________________________________________________________________________
         }else {
             cout << "It remains to put " << 10 - count << " four-deck!\n";
+            bool stop;
+            do{
+                stop = true;
+                cout << "Enter coordinate first point four-ship. (Horizontal and vertical)\n";
+                cin >> horizonOne >> verticalOne;
+                if (!(checkingTheRange(horizonOne, verticalOne))) {
+                    --count;
+                    cout << "Enter the correct coordinates!! Try again!\n\a";
+                    break;
+                }
 
+                if (map[verticalOne][horizonOne] == '@'){
+                    --count;
+                    cout << "Not excellent! Try again!\n\a";
+                    break;
+                }else {
+
+                    cout << "Excellent! It's time to mark the END point!\n";
+                }
+                cout << "Enter coordinate END point four-ship. (Horizontal and vertical)\n";
+                cin >> horizonTwo >> verticalTwo;
+                if (!(checkingTheRange(horizonTwo, verticalTwo))){
+                    --count;
+                    cout << "Enter the correct coordinates!! Try again!\n\a";
+                    break;
+                }
+
+                if (!(checkDeck(horizonOne,horizonTwo,verticalOne,verticalTwo,3))) {
+                    --count;
+                    cout << "Not excellent! Try again!\n\a";
+                    break;
+                }
+
+                if (horizonTwo == horizonOne) {
+                    if (verticalOne > verticalTwo){
+                        substitute(verticalOne,verticalTwo);
+                    }
+
+                    for(int i = verticalOne ; i <= verticalTwo; ++i){
+                        if (map[i][horizonOne] == '@'){
+                            stop = false;
+                            --count;
+                            cout << "Not excellent! Try again!\n\a";
+                            break;
+                        }
+                    }
+
+                    if (stop){
+                        for(int i = verticalOne ; i <= verticalTwo; ++i){
+                            map[i][horizonOne] = '@';
+                        }
+                    }
+                    break;
+
+                }else if (verticalTwo == verticalOne){
+                    if (horizonOne > horizonTwo){
+                        substitute(horizonOne, horizonTwo);
+                    }
+                    for( ; horizonOne <= horizonTwo ; ++ horizonOne){
+                        if (map[verticalOne][horizonOne] == '@'){
+                            stop = false;
+                            --count;
+                            cout << "Not excellent! Try again!\n\a";
+                            break;
+                        }
+                    }
+
+                    if (stop){
+                        for(int i = verticalOne ; i <= verticalTwo; ++i){
+                            map[i][horizonOne] = '@';
+                        }
+                    }
+                    break;
+                }
+
+            }while (true);
         }
-
     }
+
     statusMap(map); // чтобы игрок посмотрел последний раз на свое поле)
+    cout << "Memorize your field!!\n";
+    stopClear();
+}
+
+void processGame(){
+
 }
 
 int main() {
@@ -200,8 +345,15 @@ int main() {
     initializationMap(fieldOne);
     initializationMap(fieldTwo);
 
-    cout << "The first player places the pieces\n";
+    cout << "The first player places the pieces\n\a";
     organizationShips(fieldOne);
+    stopClear();
+
+    cout << "The second player places the pieces\n\a";
+    organizationShips(fieldTwo);
+    stopClear();
+
+
 
 
     return 0;
