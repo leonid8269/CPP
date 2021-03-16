@@ -3,42 +3,34 @@
 
 using namespace std;
 
-void sorting(vector<int>& vec){
-    for (int i = 0 ; i < vec.size() ; ++i){
-        for (int j = 0; j < vec.size() - i - 1; ++j){
+int main() {
 
-            if(vec[j] > vec[j+1]){
-                int buf = vec[j];
-                vec[j] = vec[j+1];
-                vec[j+1] = buf;
+    vector<int> arr = {-2,1,-3,4,-1,2,1,-5,4}; // нахожджение максимального значения из нескольких
+    int buf = 0, max = 0;
+    int indexOne = 0, indexTwo = 0;
+
+    for(int i = 0; i < arr.size() ; ++i){
+        for (int j = i; j < arr.size() ;++j){
+            buf += arr[j];
+            if (buf > max) {
+                max = buf;
+                indexTwo = j;
             }
         }
+        buf = 0;
     }
+    int sum = 0;
 
+    for (int i = indexTwo ; i >= 0 ; --i){
+        sum += arr[i];
 
-}
-
-
-int main() {
-    vector<int> vec;
-
-    int num = 0;
-    cout << "Enter numbers: ";
-    while (true && num != -2 ){
-
-        cin >> num;
-        vec.push_back(num);
-        if (num == -1){
-            vec.pop_back();
-            sorting(vec);
-            cout << vec[4]<< " - 5 numbers in the sorted vector. View of the sorted vector:\n";
-            for (int i = 0 ;i < vec.size(); ++i)cout << vec[i]<< " ";
-            cout << "\nEnter more numbers: ";
+        if (sum == max){
+            indexOne = i;
+            break;
         }
     }
-    vec.pop_back();
-    sorting(vec);
-    for (int i = 0; i < vec.size(); ++i)  cout << vec[i]<< " ";
+
+    cout << "Index One = " << indexOne << ". Index two = " << indexTwo << ". Maximum = " << max;
 
     return 0;
 }
