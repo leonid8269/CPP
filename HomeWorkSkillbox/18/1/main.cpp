@@ -10,24 +10,16 @@ int main() {
     int indexOne = 0, indexTwo = 0;
 
     for(int i = 0; i < arr.size() ; ++i){
+
         for (int j = i; j < arr.size() ;++j){
             buf += arr[j];
             if (buf > max) {
                 max = buf;
                 indexTwo = j;
+                indexOne = i;
             }
         }
         buf = 0;
-    }
-    int sum = 0;
-
-    for (int i = indexTwo ; i >= 0 ; --i){
-        sum += arr[i];
-
-        if (sum == max){
-            indexOne = i;
-            break;
-        }
     }
 
     cout << "Index One = " << indexOne << ". Index two = " << indexTwo << ". Maximum = " << max;
