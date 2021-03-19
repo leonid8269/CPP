@@ -28,13 +28,19 @@ int main() {
 
         cin >> num;
         vec.push_back(num);
-        if (num == -1){
+
+        if (num == -1 && vec.size() > 5 ){
             vec.pop_back();
             sorting(vec);
-            cout << vec[4]<< " - 5 numbers in the sorted vector. View of the sorted vector:\n";
-            for (int i = 0 ;i < vec.size(); ++i)cout << vec[i]<< " ";
+            cout << vec[4] << " = Fifth numbers in the sorted vector. View of the sorted vector:\n";
+            for (int i = 0 ;i < vec.size(); ++i) cout << vec[i]<< " ";
             cout << "\nEnter more numbers: ";
+        }else if (num  ==  -1 && vec.size() <= 5) {
+            cout << "Minimum number of figures five\n";
+            vec.pop_back();
+            cout << "Enter more numbers (Enough back " <<  5 - vec.size()   <<" ) : ";
         }
+
     }
     vec.pop_back();
     sorting(vec);
