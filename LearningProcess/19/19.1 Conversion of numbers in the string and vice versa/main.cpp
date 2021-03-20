@@ -62,7 +62,8 @@ bool bool_sto(string& text){ // возвращает true если выполн�
 //____________________________________________________________________________________
 
 void Robert_Smith(){ // конкатенация строки
-    std::stringstream text; // класс stringstream, позволяет связать поток ввода-вывода со строкой в памяти.  Всё, что выводится в такой поток, добавляется в конец строки;
+    std::stringstream text; // класс stringstream, позволяет связать поток ввода-вывода со строкой в памяти.
+                            // Всё, что выводится в такой поток, добавляется в конец строки;
                             // всё, что считыватся из потока — извлекается из начала строки.
 
     string name = "Robert";
@@ -76,7 +77,7 @@ void Robert_Smith(){ // конкатенация строки
 
     text >> dummy >> name >> dummy >> age >> dummy >> height;
 
-    cout << " Name: " << name << " Age = " << age << " Height = " << height << endl; // для посоставления
+    cout << " Name: " << name << " Age = " << age << " Height = " << height << endl; // для составления
 
 }
 
@@ -115,7 +116,7 @@ int main() {
     string pi = "3.14159265358979328463"; // число ПИ
     cout << stod_string(pi)<< endl;     // парсинг стрки в дабл
 
-    /* stoi() - Convert string to integer (function template )
+    /* stoi () - Convert string to integer(function template )
      * stol() - Convert string to long int (function template )
      * stoul() - Convert string to unsigned integer
      * stoll() - Convert string to long long

@@ -41,6 +41,7 @@ int main() {
     double min = reference - 0.5;
     double max = reference + 0.5;
     double temperature = 36.8;
+
     bool in_range = temperature >= min && temperature <= max; // все это запишем проще в функцию.
 
     cout << in_range << endl;
