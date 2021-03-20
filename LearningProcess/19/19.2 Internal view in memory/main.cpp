@@ -4,6 +4,9 @@
 using namespace std;
 
 
+bool compare (double value, double reference, double epsilon){
+    return (value >= reference - epsilon) && (value <= reference + epsilon);
+}
 int main() {
 
     /* тип данных |  размер в байтах | Диапазон значений
@@ -32,10 +35,33 @@ int main() {
     cout << "Min: " << INT_MIN << " Max: " << INT_MAX << endl;
 
 
-    
+    //________________________
+
+    double reference = 36.6;
+    double min = reference - 0.5;
+    double max = reference + 0.5;
+    double temperature = 36.8;
+    bool in_range = temperature >= min && temperature <= max; // все это запишем проще в функцию.
+
+    cout << in_range << endl;
+    cout << compare(temperature, min, max)<< endl;      // функция возвращает если диопазон тепмературы не нарушен
 
 
-    
+
+    if (0.1 + 0.1 + 0.1 != 0.3){
+        cout << "The inscription must be absent \n"; // эта надпись должна отсутствовать..
+                                                        // но она есть потому что компьютер тупой..
+                                                        // нужно прибегнуть к функции которую мы написали
+    }
+    if (!compare(0.1 + 0.1 + 0.1, 0.3, 0.001)){
+        cout << "There is no inscription here\n";  //  теперь все ок.
+    }
+
+
+                                 //!!!!!!!!!!!!!!!!!!!!! float опасный тип данных с ним аккуратно!
+                                 //!? что такое детерминированны
+
+
 
     return 0;
 }
