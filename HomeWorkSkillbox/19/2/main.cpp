@@ -21,7 +21,7 @@ double result (const string& whole, const string& mantissa ){
 
 bool chek (const string& number){
     for (int i = 0 ; i < number.length(); ++i)
-        return !(number[i] >= '0' && number[i] <= '9') ;
+        return (number[i] >= '0' && number[i] <= '9') ;
 }
 
 
@@ -30,7 +30,7 @@ void initialization (string& number, bool turn ){
         turn ? cout << "Enter the value of the whole part:\n" : cout << "And and fractional part\n";
         cin >> number;
 
-    }while (chek(number));
+    }while (!chek(number));
 }
 
 int main() {
