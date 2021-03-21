@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string> // заголовочный файл для std::to_string
 #include <sstream> // для приминения класса stringstream, форматирование строк.
-#include <cstdio> //
+#include <cstdio> //  для использования языка C
 
 
 using namespace  std;
@@ -83,7 +83,9 @@ void Robert_Smith(){ // конкатенация строки
 
 void leonid(){ // язык С, более низкоуровневый подход...
     char text[100];
-    sprintf(text, "Name: %s, Age: %i, Height: %.2f, Hits: %f%%", "Leonid", 25, 1.90, 55.5 );  // важен порядок записи
+    sprintf(text, "Name: %s, Age: %i, Height: %.2f, Hits: %f%%", "Leonid", 25, 1.90, 55.5 );
+
+    // важен порядок записи^^
 
     cout << text;  // выводим что получилось из этого всего)
 }

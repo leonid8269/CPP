@@ -19,20 +19,55 @@
 
 #include <iostream>
 #include <string>
+#include <cstdio>
+#include <sstream>
+
+
 using namespace std;
 
+enum border{
+    MIN_SPEED,
+    MAX_SPEED = 150
+};
 
+void speedWiew (string& speed, double delta, bool& unStop){
+    double number = stod(speed);
+    number += delta;
+
+    if (number >= MAX_SPEED) {
+        cout << "Your car has reached maximum speed!! Slow down!!\n\a";
+        number = 150;
+    }
+    char wiew[100];
+    sprintf(wiew, "Car speed: %.1f %s ", number, "Km\\h" );
+
+    if (number > MIN_SPEED) cout << wiew << endl ; // показвывать скорость есл она больше минимальной
+    else if (number <= MIN_SPEED) unStop = false;
+
+    speed = to_string(number);
+}
+
+void process(string& bufSpeed, double& deltaSpeed, bool& unStop){
+    cout << "Car speed: 0.0 Km\\h \n";
+    do {
+        cout << "Enter delta:\n";
+        cin >> deltaSpeed;
+        speedWiew(bufSpeed, deltaSpeed, unStop);    // показатель спидометра.
+
+        if (!unStop) {
+            cout << "Our car stopped, end of the Program\n";
+        }
+
+    }while (unStop);
+}
 
 
 int main() {
-    string unit = "Km\\h";
-    string bufferSpeed;
-    string speed;
+    string bufSpeed = "0";
+    double deltaSpeed = 0;
+    bool unStop = true;
 
-    double delta = 0 ;
-
-
-
+    process(bufSpeed, deltaSpeed, unStop);
 
     return 0;
 }

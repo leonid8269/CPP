@@ -45,7 +45,7 @@ int main() {
     bool in_range = temperature >= min && temperature <= max; // все это запишем проще в функцию.
 
     cout << in_range << endl;
-    cout << compare(temperature, min, max)<< endl;      // функция возвращает если диопазон тепмературы не нарушен
+    cout << compare(36.6, min, max)<< endl;      // функция возвращает если диопазон тепмературы не нарушен
 
 
 
