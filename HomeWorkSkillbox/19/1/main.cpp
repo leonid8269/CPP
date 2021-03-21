@@ -30,19 +30,24 @@ enum border{
     MAX_SPEED = 150
 };
 
+bool compare (double value, double reference){
+    double epsilon = 0.01;                  // прогрешность сравнения
+    return (value >= reference - epsilon) && (value <= reference + epsilon);
+}
+
 void speedWiew (string& speed, double delta, bool& unStop){
     double number = stod(speed);
     number += delta;
 
-    if (number >= MAX_SPEED) {
+    if (!compare(number, MAX_SPEED)) {
         cout << "Your car has reached maximum speed!! Slow down!!\n\a";
         number = 150;
     }
     char wiew[100];
     sprintf(wiew, "Car speed: %.1f %s ", number, "Km\\h" );
 
-    if (number > MIN_SPEED) cout << wiew << endl ; // показвывать скорость есл она больше минимальной
-    else if (number <= MIN_SPEED) unStop = false;
+    if (!compare(number,MIN_SPEED)) cout << wiew << endl ; // показвывать скорость есл она больше минимальной
+    else if (compare(number, MIN_SPEED)) unStop = false;
 
     speed = to_string(number);
 }

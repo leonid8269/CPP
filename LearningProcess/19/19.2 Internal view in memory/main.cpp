@@ -4,6 +4,8 @@
 using namespace std;
 
 
+
+
 bool compare (double value, double reference, double epsilon){
     return (value >= reference - epsilon) && (value <= reference + epsilon);
 }
