@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.17)
+project(19_1_Conversion_of_numbers_in_the_string_and_vice_versa)
+
+set(CMAKE_CXX_STANDARD 14)
+
+add_executable(19_1_Conversion_of_numbers_in_the_string_and_vice_versa main.cpp)
