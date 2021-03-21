@@ -19,11 +19,11 @@ double result (const string& whole, const string& mantissa ){
 }
 
 
-bool chek (const string& number){
-    for (int i = 0 ; i < number.length(); ++i)
-        return (number[i] >= '0' && number[i] <= '9') ;
+bool chek (const string& number) {
+    for (int i = 0; i < number.length(); ++i)
+        if (number[i] < '0' || number[i] > '9') return false;
+    return true;
 }
-
 
 void initialization (string& number, bool turn ){
     do{
