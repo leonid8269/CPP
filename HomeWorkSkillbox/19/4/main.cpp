@@ -2,20 +2,13 @@
 
 using namespace std;
 
-enum notes{
-    C,    //! C - нота до
-    D,        //!      D - ре
-    E,        //!      E - ми
-    F,        //!     F - фа
-    G,        //!     G - соль
-    A,  //!     A - ля
-    H   //!     H или B - си
-};
+
 bool checkKey(const string& buf){
     for (int i = 0 ; i < buf.length() ; ++i)
-        if (buf[i]  < 1 || buf[i] > 7 ) return false;
+        if (buf[i]  < '1' || buf[i] > '7' ) return false;
     return true;
 }
+
 
 void enterMusic(string& track){
     string buf;
@@ -27,31 +20,29 @@ void enterMusic(string& track){
             buf = "";
             cout << "The last combination you entered is not correct. Try again";
         }
-        track += buf + ' ';
+        else track += buf + ' ';
     }
-
 }
 
 void viewMusic (const string& music){
-    int one, two, free, four, five, six, seven;
 
-    one = 1 << C ;
-    two = 1 << D ;
-    free = 1 << E;
-    four = 1 << F;
-    five = 1 << G;
-    six = 1 << A;
-    seven = 1 << H;
-
-    cout << one << " " << two << " " << free << " " << four << " " <<
-    five << " " << six << " " << seven;
+    for (int i = 0; i < music.length() ; ++i){
+        if (music[i] == '1') cout << "do ";
+        else if (music[i] == '2') cout << "re ";
+        else if (music[i] == '3') cout << "mi ";
+        else if (music[i] == '4') cout << "fa ";
+        else if (music[i] == '5') cout << "sol ";
+        else if (music[i] == '6') cout << "la ";
+        else if (music[i] == '7') cout << "si ";
+        else cout << endl;
+    }
 
 }
 
 
 int main() {
     string track;
-    //enterMusic(track);
+    enterMusic(track);
     viewMusic(track);
 
     return 0;
