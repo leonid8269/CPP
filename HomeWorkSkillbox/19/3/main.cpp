@@ -14,7 +14,7 @@ bool checkPoint(const string& num, int beginning, int border){
     return true;
 }
 
-bool chekString (const string& num, int rowSeparator){
+bool chekString (const string& num, int& rowSeparator){
     int matches = 0;
     for (int i = 0; i < num.length(); ++i){
         if (num[i] < '*' || num[i] == ',' || num[i] > '9' ) return false;       //! таблица ASCII впомощь ;)
@@ -29,17 +29,25 @@ bool chekString (const string& num, int rowSeparator){
 
     if (!checkPoint(num, 0, rowSeparator )) return false;                 //! Где 2 аргумент - с какого места начнется проверка. 3 аргумент - до какого
     if (!checkPoint(num, rowSeparator + 1, num.length())) return false;   //! + 1 - начало проверки после разделителя
-
-
     return true;
 }
 
+double parsing (const string& str, int beginning, int border ){
+    string buf;
+    for (int i = beginning; i < border; ++i ) buf += str[i];
+    return stod(buf);
+}
+
+
 void calculationProcess (const string& str, int half){
 
-    double first;
-    double second;
+   double first = parsing(str, 0, half ); //аналогичная ситуация что и до
+   double second = parsing(str, half + 1, str.length());
 
-
+   if (str[half] == '*')  cout << first * second;
+   else if (str[half] == '/') cout << first / second;
+   else if (str[half] == '+') cout << first + second;
+   else cout << first - second;
 
 }
 
