@@ -58,6 +58,7 @@ int main() {
 
     do {
         cin >> calculator;
+       if (!chekString(calculator,action))  cout << "Try again!\n\a";
     }while (!chekString(calculator, action));
 
     calculationProcess(calculator, action);
