@@ -69,7 +69,7 @@ void Robert_Smith(){ // конкатенация строки
     string name = "Robert";
     int age = 65;
     double height = 1.76;
-    text << " Name: " << name << " Age = " << age << " Height = " << height;  // все написанное таким образом соединяется в text
+    text << "Name: " << name << " Age = " << age << " Height = " << height;  // все написанное таким образом соединяется в text
 
     cout << text.str() << endl;  // вывод только чепез .str();
 
