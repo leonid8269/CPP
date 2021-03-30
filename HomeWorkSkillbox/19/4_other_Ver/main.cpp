@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <sstream>
+#include <string>
 
 using namespace std;
 
@@ -14,31 +15,33 @@ enum notes {
     SI = 64
 };
 
-void wiew(int& track){
+void wiew(string& track){
 
-    if (track & DO ) cout << "Do ";
-    if (track & RE ) cout << "RE ";
-    if (track & MI ) cout << "MI ";
-    if (track & FA ) cout << "FA ";
-    if (track & SOL ) cout << "SOL ";
-    if (track & LA ) cout << "LA ";
-    if (track & SI ) cout << "SI ";
-    cout << endl;
+    for (int i = 0;i < track.length()  ; ++i) {
+        if (track[i] & DO) cout << "Do ";
+        else if (track[i] & RE) cout << "RE ";
+        else if (track[i] & MI) cout << "MI ";
+        else if (track[i] & FA) cout << "FA ";
+        else if (track[i] & SOL) cout << "SOL ";
+        else if (track[i] & LA) cout << "LA ";
+        else if (track[i] & SI) cout << "SI ";
+        else cout << endl;
+    }
 
 }
 
-
-
 int main() {
-    stringstream track;
-
-    for (int i = 0; i < 12; ++i){
-        string buf;
-        cin >> buf;
-        track << buf + " ";
-        buf = "";
+    string track;
+    cout << "Enter your combination: ";
+    for (int i = 0; i < 12 ; ++i) {
+       string buf = "";
+       cin >> buf;
+        if (buf > "0" && buf < "8") {
+            track += buf;
+        } else {
+            --i;
+        }
     }
-
 
 
     return 0;
