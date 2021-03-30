@@ -16,7 +16,6 @@ int main() {
     char half;
 
     text >> first >> half >>  second;
-    cout << first <<  " " << second;
 
     if (half == '*') cout << first * second;
     else if ( half == '+') cout << first + second;
