@@ -15,29 +15,35 @@ enum notes {
     SI = 64
 };
 
-void wiew(string& track){
 
-    for (int i = 0;i < track.length()  ; ++i) {
-        if (track[i] & DO) cout << "Do ";
-        else if (track[i] & RE) cout << "RE ";
-        else if (track[i] & MI) cout << "MI ";
-        else if (track[i] & FA) cout << "FA ";
-        else if (track[i] & SOL) cout << "SOL ";
-        else if (track[i] & LA) cout << "LA ";
-        else if (track[i] & SI) cout << "SI ";
+void view(stringstream& track){
+
+    vector<int> arr{};
+
+    for(int i = 0; i < 12 ; ++i) track >>arr[i];
+
+    for (int i = 0;i < arr.size(); ++i) {
+        if (arr[i] & DO) cout << "Do ";
+        else if (arr[i] & RE) cout << "RE ";
+        else if (arr[i] & MI) cout << "MI ";
+        else if (arr[i] & FA) cout << "FA ";
+        else if (arr[i] & SOL) cout << "SOL ";
+        else if (arr[i] & LA) cout << "LA ";
+        else if (arr[i] & SI) cout << "SI ";
         else cout << endl;
     }
 
 }
 
 int main() {
-    string track;
+    stringstream track;
     cout << "Enter your combination: ";
     for (int i = 0; i < 12 ; ++i) {
        string buf = "";
        cin >> buf;
         if (buf > "0" && buf < "8") {
-            track += buf;
+            track << buf;
+            track << " ";
         } else {
             --i;
         }
