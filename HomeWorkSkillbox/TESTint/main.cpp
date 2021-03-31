@@ -7,18 +7,13 @@
 
 using namespace std;
 
-enum a{
-    ONE, TWO, FREE
-};
-
 int main() {
 
-    int a;
-    a = 4;
+    stringstream text;
 
+    text <<11 <<  " " << 12 << " " << 15 ;
 
-    if (a == FREE) cout << "free!\n";
-
+    int hui;
 
 
     return 0;

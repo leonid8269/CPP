@@ -7,48 +7,49 @@ using namespace std;
 
 enum notes {
     DO = 1,
-    RE = 2,
-    MI = 4,
-    FA = 8,
-    SOL = 16,
-    LA = 32,
-    SI = 64
+    RE,
+    MI,
+    FA,
+    SOL,
+    LA,
+    SI
 };
 
+void initialization (const string& track, string& music ){
 
-void view(stringstream& track){
 
-    vector<int> arr{};
+    for (int i = 0; i < track.length(); ++i ) {
+        if ((track[i] - '0')  == DO) music +=  "Do ";
+        else if ((track[i] - '0') == RE) music += "Re ";
+        else if ((track[i] - '0') == MI) music += "Mi ";
+        else if ((track[i] - '0') == FA) music += "Fa ";
+        else if ((track[i] - '0') == SOL) music += "Sol ";
+        else if ((track[i] - '0') == LA) music += "La ";
+        else if ((track[i] - '0') == SI) music += "Si ";
 
-    for(int i = 0; i < 12 ; ++i) track >>arr[i];
-
-    for (int i = 0;i < arr.size(); ++i) {
-        if (arr[i] & DO) cout << "Do ";
-        else if (arr[i] & RE) cout << "RE ";
-        else if (arr[i] & MI) cout << "MI ";
-        else if (arr[i] & FA) cout << "FA ";
-        else if (arr[i] & SOL) cout << "SOL ";
-        else if (arr[i] & LA) cout << "LA ";
-        else if (arr[i] & SI) cout << "SI ";
-        else cout << endl;
     }
 
 }
 
+
 int main() {
-    stringstream track;
-    cout << "Enter your combination: ";
+    string music;
     for (int i = 0; i < 12 ; ++i) {
        string buf = "";
        cin >> buf;
-        if (buf > "0" && buf < "8") {
-            track << buf;
-            track << " ";
-        } else {
-            --i;
-        }
+       for (int j = 0;j < buf.length() ; ++j ) {
+           if (buf[j] > '0' && buf[j] < '8') {
+               initialization(buf, music);
+           } else {
+               --i;
+               cout << "Sorry friend, you enter not correct a note, please try again\n";
+               break;
+           }
+       }
     }
 
+
+    cout << music;
 
     return 0;
 }
