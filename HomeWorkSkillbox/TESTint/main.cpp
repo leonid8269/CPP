@@ -3,18 +3,17 @@
 #include <vector>
 #include <cmath>
 #include <sstream>
-
+#include <ctime>
 
 using namespace std;
 
 int main() {
+    time_t rawtime; // скрока в секундах
 
-    stringstream text;
+    time ( & rawtime );
 
-    text <<11 <<  " " << 12 << " " << 15 ;
-
-    int hui;
-
+    stringstream time;
+    time << ctime (&rawtime);
 
     return 0;
 }
