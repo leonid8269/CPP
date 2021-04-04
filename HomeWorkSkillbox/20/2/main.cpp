@@ -9,11 +9,10 @@ void mirror(int& arr, int size){
 }
 
 int main() {
-   int arr[] = {1,2,3,4,5};
+    int arr[] = {1,2,3,4,5};
     int size = sizeof(arr)/sizeof(int);
 
    mirror(*arr, size);
-
 
     return 0;
 }
