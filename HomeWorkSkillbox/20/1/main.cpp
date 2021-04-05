@@ -3,17 +3,17 @@
 using namespace std;
 
 
-void swap(int& a, int& b){
-    a += b;
-    b = a - b;
-    a -=  b;
+void swap(int* ap, int* bp){
+    *ap += *bp;
+    *bp = *ap - *bp;
+    *ap -=  *bp;
 }
 
 int main() {
 
     int a = 10, b = 20;
-    swap(a,b);
 
+    swap(&a,&b);
     cout << a << " " << b;
 
     return 0;
