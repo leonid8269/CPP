@@ -14,7 +14,7 @@ int main() {
     int a = 10, b = 20;
 
     int *ptrA = &a; // указатель на а
-    int *ptrB = &a; // указатель на б
+    int *ptrB = &b; // указатель на б
 
     swap(ptrA, ptrB);
     cout << a << " " << b;
