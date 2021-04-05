@@ -5,11 +5,7 @@ using namespace std;
 void mirror(int* ptrArr, int size){
 
     int half = 0;
-    if (size % 2 == 0){
-        half = size /2 - 1;
-    } else {
-        half = size / 2;
-    }
+    size % 2 == 0 ? half = size /2 - 1 : half = size / 2;
 
     for (int i = 0; i <= half  ; ++i){
         int buf = 0;
@@ -27,9 +23,8 @@ int main() {
 
    mirror(ptrArr, size);
 
-   for (int i = 0; i < size ; ++i){
-       cout << arr[i];
-   }
+   for (int i = 0; i < size ; ++i)cout << arr[i];
+
 
     return 0;
 }
