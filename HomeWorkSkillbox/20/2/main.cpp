@@ -16,14 +16,12 @@ void mirror(int* ptrArr, int size){
 }
 
 int main() {
-    int arr[] = {1,2,3,4,5};
+    int arr[] = {1,2,3,4,5,3};
     int size = sizeof(arr)/sizeof(int);
 
     int *ptrArr = arr;
-
-   mirror(ptrArr, size);
-
-   for (int i = 0; i < size ; ++i)cout << arr[i];
+    mirror(ptrArr, size);
+    for (int i = 0; i < size ; ++i)cout << arr[i];
 
 
     return 0;

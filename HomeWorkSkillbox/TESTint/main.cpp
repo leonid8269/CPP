@@ -8,6 +8,7 @@
 using namespace std;
 
 int main() {
+cout << 0u - 25;
 
     return 0;
 }
