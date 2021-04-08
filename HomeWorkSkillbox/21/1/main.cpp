@@ -10,10 +10,7 @@ int swap(int& a, int& b){
 }
 
 void swapvec(vector<int>& vec, int* arr){
-
-    for (int i = 0; i < 5 ; ++i){
-        swap(vec[i], *(arr + i));
-    }
+    for (int i = 0; i < 5 ; ++i)swap(vec[i], *(arr + i));
 }
 
 int main() {
