@@ -1,19 +1,25 @@
 #include <iostream>
 
-using namespace std;
 
-int variants(int step){
-    if(step < 1) return 0 ;
+int variants (int step)
+{
+    if (step < 0)
+        return 0;
+    else
+    if (step == 0)
+        return 1;
 
+    return (variants(step - 1) + variants(step - 2) + variants(step - 3));
 }
 
+
 int main() {
-    int step = 0;
-    int method = 0;
-    cout << "What step will we jump to?\n";
+    using std::cout;
+    using std::cin;
+
+    cout << "Enter count of steps: ";
+    int step;
     cin >> step;
 
-    cout << variants(step);
-
-    return 0;
+    cout << "Variants: " << variants(step) <<  std::endl;
 }
