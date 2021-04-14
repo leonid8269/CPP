@@ -4,34 +4,31 @@
 #include <cmath>
 #include <sstream>
 #include <ctime>
+#include <fstream>
 
 
 
 int main() {
     using namespace std;
-    bool a = false;
-    bool b = true;
-    bool c  = (!(a) && !(b));
 
-    cout << " a = false, b = true. result " << c << endl;
+    string pathTxt = "C:\\CPP\\HomeWorkSkillbox\\TESTint\\file.txt";
 
-    a = true;
-    b = false;
-
-    c = (!(a) && !(b));
-    cout << "a = true, b = false. result " << c << endl;
-
-
-    a = false;
-    b = false;
-    c = (!(a) && !(b));
-    cout << "a = false, b = false result " << c << endl;
+    ifstream txt;
+    txt.open(pathTxt);
+    if (!txt.is_open()) cout << "Error opening file!\n\a";
+    else {
+       while (!txt.eof()){
+           int relevant, buf, sum;
+           string name, lastName, date;
+           txt >> name;
+           txt >> lastName;
 
 
-    a = true;
-    b = false;
-    c = (!(a) && !(b));
-    cout << "a = true, b = true . result " << c;
+
+       }
+    }
+
+    txt.close();
 
     return 0;
 }
