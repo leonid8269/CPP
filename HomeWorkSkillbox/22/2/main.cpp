@@ -10,19 +10,13 @@ int main() {
 
     string path = "C:\\CPP\\HomeWorkSkillbox\\22\\2\\text.txt";
     ifstream text;
-    text.open(path);
+    text.open(path, ifstream::binary);
     if (!text.is_open()) cout << "Error opening file \n\a";
     else {
-        int workLine = 0;
-        cout << "By how many words per line to output the text?\n";
-        cin >> workLine;
         while (!text.eof()){
-            for (int i = 0; i < workLine; ++ i ){
-                string buf;
-                text >> buf;
-                cout << buf <<  " ";
-            }
-            cout << endl;
+           char works [20];
+           text.read(works, sizeof(works));
+           for (int i = 0; i < sizeof(works) ;++i) cout << works[i];
         }
     }
     text.close();
