@@ -15,10 +15,9 @@ int main() {
     else {
         while (!text.eof()){
            char works [20] ;
+            works[19] = 0;
            text.read(works, sizeof(works) - 1); // -1 для того чтобы записывалось до \0
-          // for (int i = 0; i < sizeof(works) ;++i)
-          works[19] = 0;
-               cout << works/*[i]*/;
+               cout << works;
         }
     }
     text.close();
