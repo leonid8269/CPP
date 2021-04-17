@@ -18,7 +18,7 @@ int main() {
            text.read(works, sizeof(works) - 1); // -1 для того чтобы записывалось до \0
           // for (int i = 0; i < sizeof(works) ;++i)
           works[19] = 0;
-               cout << works/*[i]*/;
+               cout << works /*[i]*/ ;
         }
     }
     text.close();
