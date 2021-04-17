@@ -1,32 +1,32 @@
 #include <iostream>
 #include <fstream>
-#include <sstream>
-#include <vector>
+#include <string>
 
 
 
 int main() {
     using namespace std;
-    string word;
-    cout << "Enter the word:\n";
-    cin >> word;
 
-    ifstream text;
-    text.open("C:\\CPP\\HomeWorkSkillbox\\22\\1\\text.txt");
-
-    string buf; // в него будут записываться слова для дальнейшего сравнивания.
-    int countWord = 0;
-    if (!text.is_open())cout << "Error opening file!\n\a";
-    else {
-        while(!text.eof()){
-            text >> buf;
-            if (buf == word) ++countWord;
-        }
+    ifstream checkFile;
+    string path = "..\\png.png";
+    if  (path.substr(path.length() - 3) != "png") {
+        cout << "File extension error\n\a";
+        return 1;
     }
-    text.close();
 
-    cout << countWord;
+    checkFile.open(path,ifstream::binary);
+    if (!checkFile.is_open()) cout << "ERROR opening file \n\a";
 
+    else {
+        checkFile.seekg(1);
+        char exp[3];
+        checkFile >> exp;
+        string a = exp;
+        if (a == "PNG")
+            cout << "This file is a PNG\n";
+        else cout << "NO!\a\n";
+     }
+    checkFile.close();
 
     return 0;
 }
