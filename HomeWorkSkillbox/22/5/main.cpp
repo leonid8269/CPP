@@ -21,7 +21,7 @@ void answer (){
 
 }
 
-void question ( ){
+std::string question ( ){
 
 }
 

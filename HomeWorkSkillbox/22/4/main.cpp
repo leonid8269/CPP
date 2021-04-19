@@ -9,7 +9,7 @@ int main() {
 
     ifstream checkFile;
     string path = "..\\png.png";
-    if  (path.substr(path.length() - 3) != "png") {
+    if  (path.substr(path.length() - 4) != ".png") {
         cout << "File extension error\n\a";
         return 1;
     }
