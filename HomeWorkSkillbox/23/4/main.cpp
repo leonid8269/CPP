@@ -3,6 +3,7 @@
 #include <vector>
 #include <ctime>
 #include <string>
+#include <math.h>
 
 void newBank (std::vector<int>& banknotes){  //the function is called when the bank is new without notes
     using namespace std;
@@ -67,15 +68,14 @@ void restartingProgram(std::vector<int>& banknotes) {
 }
 
 void withdrawalAndAdded(std::vector<int>& arr ,int bankHun, int bankTwoHun, int bankFiveHun,
-                        int bankThous, int bankTwoThous, int bankFiveThous,
-                        int money, char operation = '-'){
+                        int bankThous, int bankTwoThous, int bankFiveThous, int money, char operation){
     using namespace std;
 
 
     if (operation == '-'){  //withdrawal cash
 
-        int hundred = 0, twoHundred = 0, fiveHundred = 0,
-        thousand = 0, twoThousand = 0,fiveThousand = 0;
+        int hundred = 0 , twoHundred  = 0, fiveHundred = 0,
+        thousand = 0 , twoThousand = 0,fiveThousand = 0;
 
         fiveThousand =  money / 5000;
         money -= fiveThousand * 5000;
@@ -93,14 +93,14 @@ void withdrawalAndAdded(std::vector<int>& arr ,int bankHun, int bankTwoHun, int 
         money -= twoHundred * 200;
 
         hundred = money / 100;
-        money -= hundred * 100;
 
-        if ( fiveThousand > bankThous) {
-            int delta = fiveThousand - bankThous;
+
+        if ( fiveThousand > bankFiveThous) {
+            int delta = fiveThousand - bankFiveThous;
             fiveThousand -= delta;
             int buf = delta * 5000;
             twoThousand += buf / 2000;
-            buf -= 2000 * delta;
+            buf -= 5000 * delta;
             thousand += buf / 1000;
         }
         if (twoThousand > bankTwoThous) {
@@ -116,11 +116,11 @@ void withdrawalAndAdded(std::vector<int>& arr ,int bankHun, int bankTwoHun, int 
             fiveHundred - delta;
             int buf = delta * 500;
             twoHundred += buf / 200;
-            buf -= 200 * delta;
+            buf -= 500 * delta;
             hundred += buf / 100;
         }
-        if (twoHundred > bankHun){
-            int delta = twoHundred - bankHun;
+        if (twoHundred > bankTwoHun){
+            int delta = twoHundred - bankTwoHun;
             twoHundred - delta;
             hundred += delta * 2;
         }
@@ -157,11 +157,13 @@ void withdrawalAndAdded(std::vector<int>& arr ,int bankHun, int bankTwoHun, int 
         }
 
         ofstream bank("..\\bank.bin",ios::binary);
-        for (int i = 0 ;i < arr.size() ;++i)bank << arr[i];
-        bank.close();
+        for (int i = 0 ;i < arr.size() ;++i) {
+            bank << arr[i];
+            bank << endl;
+        } bank.close();
 
 
-    }else{ //added money
+    }else if (operation == '+'){ //added money
 
         cout << "df\n";
 
@@ -169,7 +171,7 @@ void withdrawalAndAdded(std::vector<int>& arr ,int bankHun, int bankTwoHun, int 
 
 }
 
-void atmOperation ( const std::vector<int>& banknotes, int& sumCash){ //
+void atmOperation ( std::vector<int>& banknotes, int& sumCash){ //
     using namespace std;
 
     int bankHun = 0;
@@ -187,7 +189,7 @@ void atmOperation ( const std::vector<int>& banknotes, int& sumCash){ //
         else if (banknotes[i] == 500) ++bankFiveHun;
         else if (banknotes[i] == 1000) ++bankThous;
         else if (banknotes[i] == 2000) ++bankTwoThous;
-        else ++bankFiveThous;
+        else if (banknotes[i] == 5000) ++bankFiveThous;
     }
 
     cout << "Available to you (for withdrawal!) : \n"
@@ -202,13 +204,19 @@ void atmOperation ( const std::vector<int>& banknotes, int& sumCash){ //
     cout << "Good day!\n"
             "How match do you want to withdraw?\n";
 
-    int money = 0;
+    int money;
     char operation;
-    string buf;
+    string buf = "";
     while (true) {
         cin >> buf;
-        if (buf[0] == '+' || buf[0] == '-') operation = buf[0];
-        money = stoi(buf);
+        if (!(buf[0] == '+' || buf[0] == '-')){
+            cout << "I don't understand what you want to do\n";
+            continue;
+        }
+
+        operation = buf[0];
+        money = abs(stoi(buf));
+
         if (money > sumCash) {
             cout << "Dear, ATM does not have enough funds! Try again\n\a";
             continue;
@@ -223,8 +231,9 @@ void atmOperation ( const std::vector<int>& banknotes, int& sumCash){ //
 
 
 
-
-
+    withdrawalAndAdded(banknotes, bankHun,  bankTwoHun,  bankFiveHun,
+             bankThous,  bankTwoThous,  bankFiveThous,
+             money, operation);
 
 }
 
