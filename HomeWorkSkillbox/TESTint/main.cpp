@@ -11,24 +11,14 @@
 int main() {
     using namespace std;
 
-    string pathTxt = "C:\\CPP\\HomeWorkSkillbox\\TESTint\\file.txt";
-
-    ifstream txt;
-    txt.open(pathTxt);
-    if (!txt.is_open()) cout << "Error opening file!\n\a";
-    else {
-       while (!txt.eof()){
-           int relevant, buf, sum;
-           string name, lastName, date;
-           txt >> name;
-           txt >> lastName;
+    string number = "25.12.2018";
+    int day = stoi(number.substr(0,2));
+    int month = stoi(number.substr(3,4));
+    int year = stoi(number.substr(6,9));
 
 
 
-       }
-    }
 
-    txt.close();
 
     return 0;
 }
