@@ -3,7 +3,7 @@
 #include <vector>
 #include <ctime>
 #include <string>
-#include <math.h>
+
 
 void newBank (std::vector<int>& banknotes){  //the function is called when the bank is new without notes
     using namespace std;
@@ -67,17 +67,54 @@ void restartingProgram(std::vector<int>& banknotes) {
 
 }
 
-void withdrawalAndAdded(std::vector<int>& arr ,int bankHun, int bankTwoHun, int bankFiveHun,
+void addedMoney(std::vector<int>& banknotes){
+    using namespace std;
+    srand(time(nullptr));
+
+    ofstream bank ("..\\bank.bin", ios::binary);
+
+
+    for (int i = 0;i < banknotes.size(); ++i ){
+        int buf = rand() % 8 + 1;
+        if ( banknotes[i] == 0){
+            if (buf == 1) {
+                banknotes[i] = 100;
+                bank << banknotes[i] << endl;
+            } else if (buf == 2) {
+                banknotes[i] = 200;
+                bank << banknotes[i] << endl;
+            } else if (buf == 3) {
+                banknotes[i] = 500;
+                bank << banknotes[i] << endl;
+            } else if (buf == 4) {
+                banknotes[i] = 1000;
+                bank << banknotes[i] << endl;
+            } else if (buf == 5) {
+                banknotes[i] = 2000;
+                bank << banknotes[i] << endl;
+            } else {
+                banknotes[i] = 5000;
+                bank << banknotes[i] << endl;
+            }
+        }
+    }
+    bank.close();
+
+    exit(3);                                            //!закрытие программы после инкассации
+}
+
+
+void withdrawal(std::vector<int>& arr ,int bankHun, int bankTwoHun, int bankFiveHun,
                         int bankThous, int bankTwoThous, int bankFiveThous, int money, char operation){
     using namespace std;
 
 
-    if (operation == '-'){  //withdrawal cash
+    if (operation == '-') {  //withdrawal cash
 
-        int hundred = 0 , twoHundred  = 0, fiveHundred = 0,
-        thousand = 0 , twoThousand = 0,fiveThousand = 0;
+        int hundred = 0, twoHundred = 0, fiveHundred = 0,
+                thousand = 0, twoThousand = 0, fiveThousand = 0;
 
-        fiveThousand =  money / 5000;
+        fiveThousand = money / 5000;
         money -= fiveThousand * 5000;
 
         twoThousand = money / 2000;
@@ -95,83 +132,89 @@ void withdrawalAndAdded(std::vector<int>& arr ,int bankHun, int bankTwoHun, int 
         hundred = money / 100;
 
 
-        if ( fiveThousand > bankFiveThous) {
+        if (fiveThousand > bankFiveThous) { //!5000
             int delta = fiveThousand - bankFiveThous;
             fiveThousand -= delta;
-            int buf = delta * 5000;
-            twoThousand += buf / 2000;
-            buf -= 5000 * delta;
-            thousand += buf / 1000;
+
+            if (delta * 5 % 2  == 0 ) twoThousand += delta * 5 / 2;
+            else {
+                twoThousand += delta * 5 / 2;
+                thousand ++;
+            }
+
         }
-        if (twoThousand > bankTwoThous) {
+        if (twoThousand > bankTwoThous) {        //!2000
             int delta = twoThousand - bankTwoThous;
+            twoThousand -= delta;
+
             thousand += delta * 2;
+
         }
-        if (thousand > bankThous) {
+        if (thousand > bankThous) {              //!1000
             int delta = thousand - bankThous;
+            thousand -= delta;
             fiveHundred += delta * 2;
         }
-        if(fiveHundred > bankFiveHun){
+        if (fiveHundred > bankFiveHun) {         //!500
             int delta = fiveHundred - bankFiveHun;
-            fiveHundred - delta;
-            int buf = delta * 500;
-            twoHundred += buf / 200;
-            buf -= 500 * delta;
-            hundred += buf / 100;
+            fiveHundred -= delta;
+
+           if (delta * 5 % 2 == 0) twoHundred += delta * 5 / 2;
+           else {
+               twoHundred += delta * 5 / 2;
+               hundred ++;
+           }
+
         }
-        if (twoHundred > bankTwoHun){
+        if (twoHundred > bankTwoHun) {       //!200
             int delta = twoHundred - bankTwoHun;
-            twoHundred - delta;
+            twoHundred -= delta;
             hundred += delta * 2;
         }
-        if (hundred > bankHun){
+        if (hundred > bankHun) {            //!100
             cout << "I can't give you that amount\n";
-            exit(2);                                            //EXIT from program
+            exit(2);                                                             //!!EXIT from program
         }
 
-        for (int i = 0; i < arr.size(); ++i){
+
+
+        for (int i = 0; i < arr.size(); ++i) {
             if (fiveThousand > 0 && arr[i] == 5000) {
-                 arr[i] = 0;
-                 fiveHundred --;
-            }
-            if (twoThousand > 0 && arr[i] == 2000){
                 arr[i] = 0;
-                twoThousand --;
+                fiveThousand--;
             }
-            if (thousand > 0 && arr[i] == 1000){
+            if (twoThousand > 0 && arr[i] == 2000) {
+                arr[i] = 0;
+                twoThousand--;
+            }
+            if (thousand > 0 && arr[i] == 1000) {
                 arr[i] = 0;
                 thousand--;
             }
-            if (fiveHundred > 0 && arr[i] == 500){
+            if (fiveHundred > 0 && arr[i] == 500) {
                 arr[i] = 0;
-                fiveHundred --;
+                fiveHundred--;
             }
-            if (twoHundred > 0 && arr[i] == 200){
+            if (twoHundred > 0 && arr[i] == 200) {
                 arr[i] = 0;
-                twoHundred --;
+                twoHundred--;
             }
-            if (hundred > 0 && arr[i] == 100){
+            if (hundred > 0 && arr[i] == 100) {
                 arr[i] = 0;
-                hundred --;
+                hundred--;
             }
         }
 
-        ofstream bank("..\\bank.bin",ios::binary);
-        for (int i = 0 ;i < arr.size() ;++i) {
+        ofstream bank("..\\bank.bin", ios::binary);
+        for (int i = 0; i < arr.size(); ++i) {
             bank << arr[i];
             bank << endl;
-        } bank.close();
-
-
-    }else if (operation == '+'){ //added money
-
-        cout << "df\n";
-
+        }
+        bank.close();
     }
-
 }
 
-void atmOperation ( std::vector<int>& banknotes, int& sumCash){ //
+void atmOperation ( std::vector<int>& banknotes, int& sumCash){
     using namespace std;
 
     int bankHun = 0;
@@ -193,32 +236,46 @@ void atmOperation ( std::vector<int>& banknotes, int& sumCash){ //
     }
 
     cout << "Available to you (for withdrawal!) : \n"
-                 "100 = " <<  bankHun << " banknotes!\n"
-                 "200 = " <<  bankTwoHun << " banknotes!\n"
-                 "500 = " <<  bankFiveHun << " banknotes!\n"
-                 "1000 = " << bankThous << " banknotes!\n"
-                 "2000 = " << bankTwoThous << " banknotes!\n"
-                 "5000 = " << bankFiveThous << " banknotes!\n"
+                 "100 = "  <<  bankHun       << " banknotes!\n"
+                 "200 = "  <<  bankTwoHun    << " banknotes!\n"
+                 "500 = "  <<  bankFiveHun   << " banknotes!\n"
+                 "1000 = " <<  bankThous     << " banknotes!\n"
+                 "2000 = " <<  bankTwoThous  << " banknotes!\n"
+                 "5000 = " <<  bankFiveThous << " banknotes!\n"
                  "Maximum withdrawal limit! " << sumCash << std::endl;
 
-    cout << "Good day!\n"
-            "How match do you want to withdraw?\n";
 
-    int money;
+    if (sumCash == 0) {
+        cout << "Ups, the money ended, waiting for the bank employees\n\a";
+
+    }else {
+        cout << "Good day!\n"
+                "How match do you want to withdraw?\n";
+    }
+
     char operation;
-    string buf = "";
+
+    cout << "Enter the operation you want to perform ( '-' For removal. '+' replenishment of money) :  \n";
+
     while (true) {
-        cin >> buf;
-        if (!(buf[0] == '+' || buf[0] == '-')){
+        cin >> operation;
+        if (operation != '+' && operation != '-'){
             cout << "I don't understand what you want to do\n";
             continue;
         }
+        break;
+    }
+    if (operation == '+') addedMoney(banknotes);
 
-        operation = buf[0];
-        money = abs(stoi(buf));
-
+    int money;
+    cout << "Enter the amount you want to remove\n";
+    while (true) {
+        cin >> money;
         if (money > sumCash) {
             cout << "Dear, ATM does not have enough funds! Try again\n\a";
+            continue;
+        }else if (money <= 0){
+            cout << "Are you clown?\n";
             continue;
         }
         break;
@@ -226,12 +283,9 @@ void atmOperation ( std::vector<int>& banknotes, int& sumCash){ //
 
     if (money % 100 > 0) {
         money -= money % 100;
-        cout << "I can only give you one\n" << money;
+        cout << "I can only\n" << money;
     }
-
-
-
-    withdrawalAndAdded(banknotes, bankHun,  bankTwoHun,  bankFiveHun,
+    withdrawal(banknotes, bankHun,  bankTwoHun,  bankFiveHun,
              bankThous,  bankTwoThous,  bankFiveThous,
              money, operation);
 
@@ -243,6 +297,7 @@ int main() {
 
     if (!checkFullness()) newBank(banknotes); // on first launch
     else restartingProgram(banknotes);// when restarting after closing the app
+
     int sumCash = 0; //amount in the bank
     atmOperation(banknotes, sumCash);
 
