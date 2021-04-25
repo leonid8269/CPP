@@ -24,6 +24,7 @@ void take_damage (character& person, int damage){  // если передава�
 
 void save_character (std::ofstream& file, character& person){
     int len = person.name.length();
+
     file.write((char*)&len, sizeof(len));
     file.write(person.name.c_str(), len);
     file.write((char*)&person.health, sizeof person.health);
@@ -32,7 +33,7 @@ void save_character (std::ofstream& file, character& person){
 
 void load_character (std::ifstream& file, character& person){
 
-    int len;
+    int len ;
     file.read((char*)&len, sizeof len);
     person.name.resize(len);
     file.read((char*)person.name.c_str(), len);
@@ -55,9 +56,10 @@ int main() {
        people[i].armor = (std::rand() % 40) + 10;
    }*/
 
+   /*
    for (int i = 0; i < 10; i++){
        take_damage(people[i], 30);
-   }
+   }*/
 
    std::ifstream file ("..\\save.bin", std::ios::binary);
    for (int i = 0; i < 10; ++i)
