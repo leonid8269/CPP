@@ -10,11 +10,8 @@
 
 int main() {
     using namespace std;
-    string name = "leonid";
-    int len = 2;
-    cout << name.size() << endl;
-    name.resize(len);
-    cout << name.size();
+    int answer  = 6;
+    while (answer < 0  || answer > 4)cin >> answer;
 
     return 0;
 }
