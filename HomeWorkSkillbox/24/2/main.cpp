@@ -40,14 +40,14 @@
 
 
  struct village{
- private:
+
 
      struct life_house{
          int quantity = 0;             // кол-во жилиых домов
          std::string name_build;        // имя дома
          int level = 0;        //этажность жилых домов (может быть несколько!)
          std::vector<double> ceiling_height ; // высота потолков на каждом из этажей, кол-во элементов зависит от level.
-         std::vector<int> rooms_level ; // кол-во комнат на этаже. кол-во эл зависит от левел
+         std::vector<int> rooms_level  ; // кол-во комнат на этаже. кол-во эл зависит от левел
          std::vector<std::string> name_room; //названия комнат, кол-во элементов зависит от  размера room slvl* на содержание..
          std::vector<double> room_area ; // кол-во эл от room lvl
          bool stove_heating = false;
@@ -62,7 +62,7 @@
      };
 
 
- public:
+
      int id = {}; // номер участка
      int buildings = {}; //кол-во зданий на участке.
 
@@ -108,14 +108,14 @@ int main() {
 
                 land.build.rooms_level[land.build.level];     // комнат на этаже
                 for(int k = 0; k < land.build.rooms_level.size(); ++k){
-                    cout << "On " << k + 1 << " Lvl. How many rooms&\n";
+                    cout << "On " << k + 1 << " Lvl. How many rooms?\n";
                     cin >> land.build.rooms_level[k];
                 }
 
                 //!!площадь комнат?___________________________________________________________________________
 
 
-                cout << ""
+                cout << " ";
 
 
 

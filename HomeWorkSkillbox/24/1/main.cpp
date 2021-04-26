@@ -1,17 +1,23 @@
 #include <iostream>
 #include <fstream>
 
-struct data {
+using std::cin;
+using std::cout;
+using std::string;
+using std::endl;
+using std::ofstream;
+using std::ifstream;
+using std::ios;
+
+
+struct data_journal {
     std::string name;
     std::string last_name;
-    int cash;
+    int cash{};
     std::string date;
-
-
 };
 
 std::string valText (){
-    using namespace std;
     string name = "";
 
     bool good = false;
@@ -27,7 +33,6 @@ std::string valText (){
 }
 
 int money(){
-    using namespace std;
     string cash;
     while (true){
         cash = ""; //description of the line content
@@ -48,7 +53,6 @@ int money(){
 }
 
 std::string date (){
-    using namespace std;
     string number;
 
     while (true) {
@@ -72,8 +76,8 @@ std::string date (){
 }
 
 
-void add_record(std::ofstream& book, data& journal){
-    using namespace std;
+void add_record(std::ofstream& book, data_journal& journal){
+
 
     cout << "Enter a name of the person:\n";
     journal.name = valText();
@@ -90,8 +94,7 @@ void add_record(std::ofstream& book, data& journal){
     book << journal.name << " " << journal.last_name << " " << journal.cash << " " << journal.date << endl;
 }
 
-void list_journal(std::ifstream& book, data& journal){
-    using namespace std;
+void list_journal(std::ifstream& book){
     while (!book.eof()){
         string buf;
         getline(book, buf);
@@ -100,8 +103,6 @@ void list_journal(std::ifstream& book, data& journal){
 }
 
 int main() {
-    using namespace std;
-
     string answer;
     cout <<  "Read or log an entry? (Enter list or add): \n";
     while (true){
@@ -113,14 +114,14 @@ int main() {
         break;
     }
     if (answer == "add") {
-        data journal;
+        data_journal journal;
         ofstream book("..\\accounting_book.txt", ios::app);
         add_record(book, journal);
         book.close();
     }else {
-        data journal;
+        data_journal journal;
         ifstream book("..\\accounting_book.txt");
-        list_journal(book, journal);
+        list_journal(book);
         book.close();
     }
 
