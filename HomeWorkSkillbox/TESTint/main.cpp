@@ -10,8 +10,9 @@
 
 int main() {
     using namespace std;
-    int answer  = 6;
-    while (answer < 0  || answer > 4)cin >> answer;
+    string answer;
+    while (answer != "yes" && answer != "no") cin >> answer;
+
 
     return 0;
 }

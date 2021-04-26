@@ -39,29 +39,39 @@
 #include <fstream>
 
 
+using std::cin;
+using std::cout;
+using std::string;
+using std::endl;
+using std::ofstream;
+using std::ifstream;
+using std::ios;
+using std::vector;
+
+
  struct village{
-
-
      struct life_house{
          int quantity = 0;             // кол-во жилиых домов
-         std::string name_build;        // имя дома
+         string name_build;        // имя дома
          int level = 0;        //этажность жилых домов (может быть несколько!)
-         std::vector<double> ceiling_height ; // высота потолков на каждом из этажей, кол-во элементов зависит от level.
-         std::vector<int> rooms_level  ; // кол-во комнат на этаже. кол-во эл зависит от левел
-         std::vector<std::string> name_room; //названия комнат, кол-во элементов зависит от  размера room slvl* на содержание..
-         std::vector<double> room_area ; // кол-во эл от room lvl
-         bool stove_heating = false;
+         vector<double> ceiling_height ; // высота потолков на каждом из этажей, кол-во элементов зависит от level.
+         vector<int> rooms_level  ; // кол-во комнат на этаже. кол-во эл зависит от левел
+         vector<string> name_room; //названия комнат, кол-во элементов зависит от  размера room lvl* на содержание..
+         vector<double> room_area ; // площадь комнат
+         bool stove_heating = false; // будем считать что все жилые дома отапливаеются от центральной системы отопления
+        //! double build_area = 1; // площадь постройки будет расчитываться по максимальному значению площадей помещения одного из этажа, чей больше..)
+                                // из расчёта + 100 см на стены :D сильно не хочется заморачиваться
+
+
      };
 
-     struct other_build {
-         std::vector<std::string> name; // построек может быть несколько... кол-во элементов зависит от количества простроек)
-         int level  = 0;                   //этажей
-         std::vector<int> room_level ; //комнат на этажах
+     struct other_build { // остальные постойки (не жилые)
+         string name;
+         int level  = 0;                   //этажей я ограничил макс 2 этажа
+         vector<int> room_level ; //комнат на этажах ограничил до 2
          double build_area = 0 ; // прощадь постройки.
 
      };
-
-
 
      int id = {}; // номер участка
      int buildings = {}; //кол-во зданий на участке.
@@ -70,9 +80,50 @@
      other_build other;
  };
 
+void names_rooms(vector<string>& name_room){
+    while (true){
+        cout << "Standard names for rooms:\n"
+                "Bedroom\n"
+                "Living room\n"
+                "Canteen\n"
+                "Kitchen\n"
+                "Hall\n"
+                "Children's bedroom\n"
+                "Bathroom\n"
+                "Aquodiscoteca\n"
+                "Mud room\n"
+                "Dance room\n";
+
+        for(int i = 0; i < name_room.size() ; ++i){
+            cout << "enter a name for the room №: " << i + 1;
+            cin >> name_room[i];
+        }
+        string answer;
+        cout << "Are you sure about the room names (yes/no?)\n";
+        while ( answer != "yes" && answer != "no") cin >> answer;
+        if (answer == "yes") break;
+        else continue;
+    }
+
+}
+
+void  rooms_area (vector<double>& square, vector<string>& name_room ){
+    cout << "Ok, let's start calculating the area of the rooms \n";
+
+    for (int i = 0; i < square.size(); ++i){
+        cout << "Enter the length for '" << name_room[i] << "'\n";
+        int length = 0;
+        while (length < 1)cin >> length;
+        cout << "Enter the width for '" << name_room[i] << "'\n";
+        int width = 0;
+        while (width < 1) cin >> width;
+        cout << "Room area = " << length * width << endl;
+        square[i] = length * width;
+    }
+}
+
 
 int main() {
-    using namespace std;
     int quantity = {};
     cout << "Enter the total number of plots in the village. \n";
     while (quantity <= 0) cin >> quantity;
@@ -87,7 +138,7 @@ int main() {
         while (land.buildings < 1) cin >> land.buildings;
 
         cout << "How many of them are residential?";
-        while (land.build.quantity < land.buildings && land.build.quantity < 1) cin >> land.build.quantity;
+        while (land.build.quantity < land.buildings && land.build.quantity < 1) cin >> land.build.quantity; //! не может ыть жилых домов меньше 1 и больше указанных всего)
 
         cout << "Okay! Will describe residential buildings first!\n";
         for(int i = 0 ; i < land.build.quantity ;++i){
@@ -106,17 +157,52 @@ int main() {
                     cin >> land.build.ceiling_height[k];
                 }
 
+                int sum_rooms_level = {};
                 land.build.rooms_level[land.build.level];     // комнат на этаже
                 for(int k = 0; k < land.build.rooms_level.size(); ++k){
                     cout << "On " << k + 1 << " Lvl. How many rooms?\n";
                     cin >> land.build.rooms_level[k];
+                    sum_rooms_level += land.build.rooms_level[k];
                 }
 
-                //!!площадь комнат?___________________________________________________________________________
+                land.build.name_room[sum_rooms_level]; // инициализируем размер  вектора  колличеством комнат
+                names_rooms(land.build.name_room);  // присваиваем названия комнат
+
+                land.build.room_area[sum_rooms_level]; // инициализация размера вектора площади каждой комнаты
+                rooms_area(land.build.room_area, land.build.name_room); // инициализируем площадь комнат)
+
+                cout << "And finally \n"
+                        "Is your house heated by stove heating (yes or no)?\n";
+                string answer;
+                while (answer != "yes" && answer != "no") cin >> answer;
+
+                if (answer == "yes") land.build.stove_heating = true;
+
+                cout << "Good! Let's move on\n";
 
 
-                cout << " ";
+ //!!! добавь !площадь застрйки дома....
 
+
+
+//! запишем главный дом в файл...
+
+                ofstream add_record_in_file ("..\\inventory.txt", ios::app);
+                add_record_in_file << "Plot ID " <<  i + 1 << endl;
+                add_record_in_file << "Name of the building " << land.build.name_build << endl;
+                add_record_in_file << "Floors in the building " << land.build.level <<  endl;
+                for (int k = 0; k < land.build.level; ++i ){
+                    add_record_in_file << "Ceiling height on the " << i + 1 << " floor = "
+                                        <<  land.build.ceiling_height[k] << endl;
+                }
+                for(int k = 0 ;k < land.build.rooms_level.size() ;++k) {
+                    add_record_in_file << "On the " << k + 1 << " floor of rooms: " << land.build.rooms_level[k];
+
+                }
+
+
+
+                add_record_in_file.close();
 
 
             }
