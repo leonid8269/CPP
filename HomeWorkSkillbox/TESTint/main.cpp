@@ -10,9 +10,9 @@
 
 int main() {
     using namespace std;
-    string answer;
-    while (answer != "yes" && answer != "no") cin >> answer;
+    int a =0;
 
+    while (a < 1 || a > 2) cin >> a;
 
     return 0;
 }
