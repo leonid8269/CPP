@@ -10,9 +10,6 @@
 
 int main() {
     using namespace std;
-    int a =0;
-
-    while (a < 1 || a > 2) cin >> a;
-
+    
     return 0;
 }
