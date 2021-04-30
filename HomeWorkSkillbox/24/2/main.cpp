@@ -28,11 +28,7 @@
 
  */
 
- /* Логика
-  *
-  *
-  *
-  */
+
 
 #include <iostream>
 #include <vector>
