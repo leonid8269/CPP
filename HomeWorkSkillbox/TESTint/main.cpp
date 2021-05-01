@@ -8,8 +8,16 @@
 
 
 
+
 int main() {
     using namespace std;
-    
+
+
+    char cha [20];
+
+    cha[10] = '0' + 5;
+
+    cout << cha[10];
+
     return 0;
 }
