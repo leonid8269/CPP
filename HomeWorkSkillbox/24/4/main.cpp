@@ -38,9 +38,17 @@
 
 
 
+
+
+
+
+Сделать так чтобы массив каждый раз не сохранялся а только положение бойцов, и каждый раз их идентифицировать...короче подумать надо
+
+
 #include <iostream>
 #include <ctime> //     srand(time(nullptr)); чтобы рандом был разный с каждым разом)
 #include <string>
+#include <fstream>
 
 
 using std::cin;
@@ -55,8 +63,7 @@ struct character{
     int armor{};
     int damage{};
 
-
-    int location{};
+    int location{}; // расположение в массиве чаров
 };
 
 void location_initialization(character& player, character *NPC){ // расставлю персонажей, с проверкой на совпадения и соприкосновения
@@ -79,19 +86,15 @@ void new_game(char *map, character& player, character *NPC){
     cin >>  player.name;
 
     cout << "Okay " << player.name << ". How many health points do you have left? Enter number: \n";
-    cin >> player.health;
+    while (player.health < 1) cin >> player.health;
 
     cout << "How much is the armor intact?: \n";
-    cin >> player.armor;
+    while (player.armor < 0) cin >> player.armor;
 
     cout << "How much damage can you do?: \n";
-    cin >> player.damage;
-
-
+    while (player.damage < 1) cin >> player.damage;
 
     cout << "\n\nGood soldier! Good hunting!!\n\n";
-
-
 
     srand(time(nullptr));
     for (int i = 0; i < 5; ++i){
@@ -104,28 +107,45 @@ void new_game(char *map, character& player, character *NPC){
     location_initialization(player, NPC);
 
 
-    for (int i = 0; i < 40*40; ++i ) { // инициализация поля
+    for (int i = 0; i < 40*40; ++i ) { // инициализация поля // З
+
         map[i] = '.';
         if (i == player.location) map[i] = 'P';
         for(int j = 0; j < 5; ++j){
             if (i == NPC[j].location) map[i] = '0' + j;
         }
     }
+}
+void save_game(char *map, character& player, character *NPC){
+    std::ofstream save ("..\\save.bin", std::ios::binary);
+    save << map << endl; //первая строчка карта
+    save << player.name << " " << player.health << " " << player.armor << " " << player.damage << " "
+            << player.location << endl; // вторая строчка инфа игрока
 
-
-/*!
-   for (int i = 0; i < (40*40); ++i ){
-       if (i % 40 == 0 ) cout << endl;
-       cout << map[i];
-   }
-   */
+    for(int i = 0; i < 5; ++i) save << NPC[i].name << " " << NPC[i].health << " " << NPC[i].armor << " "
+                                    << NPC[i].damage << " " << NPC[i].location << endl; // 3-7 строчки инфа по врагам.
+    save.close();
 }
 
 void load_game(char *map, character& player, character *NPC){
-
+    std::ifstream load ("..\\save.bin", std::ios::binary);
+    if(!load.is_open()){
+        cout << "Not found a save-game!! Start a New-Game? (y\\n)\n";
+        char answer;
+        cin >> answer;
+        if(answer == 'y') new_game(map, player, NPC);
+        else {
+            cout << "Goodbye!!";
+            exit(1);                                                                    //! точка выхода 1;
+        }
+    }else {
+      load >> map;
+      load >> player.name >> player.health >> player.armor >> player.damage >> player.location;
+      for (int i = 0;i < 5 ;++i) load >> NPC[i].name >> NPC[i].health >> NPC[i].armor >> NPC[i].damage
+                                        >> NPC[i].location;
+    }
+    load.close();
 }
-
-
 
 void start_game(char *map, character& player, character *NPC){
     cout << "Hello! You want to begin a 'new' game or 'load'?\n";
@@ -150,6 +170,29 @@ void start_game(char *map, character& player, character *NPC){
     }
 }
 
+bool game_over(character& player, character *NPC){
+
+    for (int i = 0; i < 5; ++i){
+        if (NPC[i].health < 1) {
+            NPC[i].name = "DEAD";
+            NPC[i].location = -1;
+        }
+    }
+
+    if (player.health <= 0) return true;
+    for(int i = 0 ; i < 5; ++i) if (NPC[i].health > 1) return false;
+
+    return true;
+}
+
+
+void process_game (char *map, character& player, character *NPC){
+
+    while (game_over(player, NPC)){
+
+    }
+}
+
 int main() {
     char map[40*40];
     character player;
@@ -157,10 +200,16 @@ int main() {
 
     start_game(map, player, NPC);
 
+
+
     for (int i = 0; i < (40*40); ++i ){
         if (i % 40 == 0 ) cout << endl;
-        cout << map[i];
+        if (map[i] == '0' || map[i] == '1' || map[i] == '2' || map[i] == '3' || map[i] == '4') cout << 'E';
+        else cout << map[i];
     }
+
+
+
 
 
     return 0;
