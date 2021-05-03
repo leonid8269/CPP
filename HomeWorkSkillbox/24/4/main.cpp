@@ -66,9 +66,17 @@ struct character{
 };
 
 
+void update_location (vector<char>& map, character& player, character *NPC ){ // применяется при каждом изменении позиции
+    for (int i = 0 ; i < map.size(); ++i ){
+        map[i] = '.';
+        if (i == player.location) map[i] = 'P';
+        for(int k = 0; k < 5; ++k)
+            if (i == NPC[k].location) map[i] = '0' + k;
+    }
+}
+
 
 void view_Map(vector<char>& map){
-
     for (int i = 0; i < map.size(); ++i ){
         if (i % (int)sqrt(map.size()) == 0 ) cout << endl;
         if (map[i] == '0' || map[i] == '1' || map[i] == '2' || map[i] == '3' || map[i] == '4') cout << 'E';
@@ -78,15 +86,6 @@ void view_Map(vector<char>& map){
 
 }
 
-
-void update_location (vector<char>& map, character& player, character *NPC ){ // применяется при каждом изменении позиции
-    for (int i = 0 ; i < map.size(); ++i ){
-        map[i] = '.';
-        if (i == player.location) map[i] = 'P';
-        for(int k = 0; k < 5; ++k)
-            if (i == NPC[k].location) map[i] = '0' + k;
-     }
-}
 
 void location_initialization(character& player, character *NPC){ // расставлю персонажей, с проверкой на совпадения и соприкосновения
     srand(time(nullptr));
@@ -351,7 +350,7 @@ void process_game (vector<char>& map, character& player, character *NPC){
 
 }
 
-
+//! Основные проблемы - перепрыгивают сквозь поле если масимально справа, бот после <0 здоровья умирает только через 4 хода
 
 int main() {
     std::vector<char> map(40*40, 'Z');
