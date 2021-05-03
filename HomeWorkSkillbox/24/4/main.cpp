@@ -42,19 +42,18 @@
 
 
 
-Сделать так чтобы массив каждый раз не сохранялся а только положение бойцов, и каждый раз их идентифицировать...короче подумать надо
-
-
 #include <iostream>
 #include <ctime> //     srand(time(nullptr)); чтобы рандом был разный с каждым разом)
 #include <string>
 #include <fstream>
-
+#include <vector>
+#include <cmath>
 
 using std::cin;
 using std::cout;
 using std::endl;
 using std::string;
+using std::vector;
 
 struct character{
 
@@ -65,6 +64,29 @@ struct character{
 
     int location{}; // расположение в массиве чаров
 };
+
+
+
+void view_Map(vector<char>& map){
+
+    for (int i = 0; i < map.size(); ++i ){
+        if (i % (int)sqrt(map.size()) == 0 ) cout << endl;
+        if (map[i] == '0' || map[i] == '1' || map[i] == '2' || map[i] == '3' || map[i] == '4') cout << 'E';
+        else cout << map[i];
+    }
+    cout << endl;
+
+}
+
+
+void update_location (vector<char>& map, character& player, character *NPC ){ // применяется при каждом изменении позиции
+    for (int i = 0 ; i < map.size(); ++i ){
+        map[i] = '.';
+        if (i == player.location) map[i] = 'P';
+        for(int k = 0; k < 5; ++k)
+            if (i == NPC[k].location) map[i] = '0' + k;
+     }
+}
 
 void location_initialization(character& player, character *NPC){ // расставлю персонажей, с проверкой на совпадения и соприкосновения
     srand(time(nullptr));
@@ -80,19 +102,22 @@ void location_initialization(character& player, character *NPC){ // расста
     }
 }
 
-void new_game(char *map, character& player, character *NPC){
+void new_game(vector<char>& map, character& player, character *NPC){
 
     cout  << "Enter the name your character: \n";
     cin >>  player.name;
 
     cout << "Okay " << player.name << ". How many health points do you have left? Enter number: \n";
-    while (player.health < 1) cin >> player.health;
+    do cin >> player.health;
+    while (player.health < 1) ;
 
     cout << "How much is the armor intact?: \n";
-    while (player.armor < 0) cin >> player.armor;
+    do cin >> player.armor;
+    while (player.armor < 0);
 
     cout << "How much damage can you do?: \n";
-    while (player.damage < 1) cin >> player.damage;
+    do cin >> player.damage;
+    while (player.damage < 1);
 
     cout << "\n\nGood soldier! Good hunting!!\n\n";
 
@@ -104,30 +129,24 @@ void new_game(char *map, character& player, character *NPC){
         NPC[i].damage = rand() % 30 + 15;
     }
 
-    location_initialization(player, NPC);
-
-
-    for (int i = 0; i < 40*40; ++i ) { // инициализация поля // З
-
-        map[i] = '.';
-        if (i == player.location) map[i] = 'P';
-        for(int j = 0; j < 5; ++j){
-            if (i == NPC[j].location) map[i] = '0' + j;
-        }
-    }
+    location_initialization(player, NPC); // проверяет чтобы не попасть в одно и тоже место...
+    update_location(map, player, NPC);  // расставляет фигурки
 }
-void save_game(char *map, character& player, character *NPC){
+
+void save_game( character& player, character *NPC){
+
     std::ofstream save ("..\\save.bin", std::ios::binary);
-    save << map << endl; //первая строчка карта
     save << player.name << " " << player.health << " " << player.armor << " " << player.damage << " "
             << player.location << endl; // вторая строчка инфа игрока
 
     for(int i = 0; i < 5; ++i) save << NPC[i].name << " " << NPC[i].health << " " << NPC[i].armor << " "
                                     << NPC[i].damage << " " << NPC[i].location << endl; // 3-7 строчки инфа по врагам.
     save.close();
+    cout << "You saved successfully!\n";
 }
 
-void load_game(char *map, character& player, character *NPC){
+void load_game(vector<char>& map, character& player, character *NPC){
+
     std::ifstream load ("..\\save.bin", std::ios::binary);
     if(!load.is_open()){
         cout << "Not found a save-game!! Start a New-Game? (y\\n)\n";
@@ -139,17 +158,18 @@ void load_game(char *map, character& player, character *NPC){
             exit(1);                                                                    //! точка выхода 1;
         }
     }else {
-      load >> map;
       load >> player.name >> player.health >> player.armor >> player.damage >> player.location;
       for (int i = 0;i < 5 ;++i) load >> NPC[i].name >> NPC[i].health >> NPC[i].armor >> NPC[i].damage
                                         >> NPC[i].location;
     }
+
     load.close();
+    update_location(map,player,NPC);
 }
 
-void start_game(char *map, character& player, character *NPC){
+void start_game(vector<char>& map, character& player, character *NPC){
     cout << "Hello! You want to begin a 'new' game or 'load'?\n";
-    string answer;
+    string answer {};
 
     while (true) {
         cin >> answer;
@@ -161,6 +181,7 @@ void start_game(char *map, character& player, character *NPC){
         }
         else if (answer == "load"){
             load_game(map,player, NPC);
+            update_location(map, player, NPC);
             break;
         }
         else {
@@ -171,46 +192,179 @@ void start_game(char *map, character& player, character *NPC){
 }
 
 bool game_over(character& player, character *NPC){
-
-    for (int i = 0; i < 5; ++i){
-        if (NPC[i].health < 1) {
-            NPC[i].name = "DEAD";
-            NPC[i].location = -1;
-        }
-    }
-
     if (player.health <= 0) return true;
-    for(int i = 0 ; i < 5; ++i) if (NPC[i].health > 1) return false;
+    for(int i = 0 ; i < 5; ++i) if (NPC[i].health > 0 ) return false;
 
     return true;
 }
 
-
-void process_game (char *map, character& player, character *NPC){
-
-    while (game_over(player, NPC)){
-
+void death_check(character *NPC){
+    for (int queue = 0;queue< 5 ; queue++){
+        if (NPC[queue].health <= 0) {
+            NPC[queue].location = -99999; //
+            NPC[queue].name = "!!DEAD!!";
+        }
     }
 }
 
+void player_vs_bot (character& player, character *NPC, int queue){ // если передавать значения по адресу то нужно обращатся к полям через -> а если чреез ссылку то через точку
+    cout << NPC[queue].name << " took damage: -" << player.damage << endl;
+    NPC[queue].armor -= player.damage;
+    if(NPC[queue].armor < 0){
+        NPC[queue].health += NPC[queue].armor;
+        NPC[queue].armor = 0;
+    }
+
+
+}
+
+void bot_vs_player (character& player, character *NPC, int queue){
+
+    cout << player.name << " took damage: -" << NPC[queue].damage << std::endl;
+    player.armor -= NPC[queue].damage;
+    if(player.armor < 0) {
+        player.health += player.armor;
+        player.armor = 0;
+    }
+}
+
+void players_turn (vector<char>& map,character& player, character *NPC){
+    string answer;
+    cout << "Enter the command:\n";
+    do cin >> answer;
+    while (answer != "save"  &&  answer != "load" && answer != "left" &&
+           answer != "right" &&  answer != "top"  && answer != "bottom");
+
+    if (answer == "save") {
+        save_game(player, NPC);
+        players_turn(map,player,NPC);
+    }else if (answer == "load") {
+        load_game(map, player, NPC);
+        players_turn(map,player,NPC);
+    }else if (answer == "left") {
+        if (player.location % 40 == 0) return;
+        else {
+            if (map[player.location - 1] >= '0' && map[player.location - 1] <= '4'){
+                player_vs_bot(player, NPC, (int) map[player.location - 1] - '0');
+            }else {
+                player.location -= 1;
+            }
+        }
+
+    }else if (answer == "right") {
+        if (player.location % 39 == 0) return;
+        else {
+            if (map[player.location + 1] >= '0' && map[player.location + 1] <= '4'){
+                player_vs_bot(player, NPC, (int) map[player.location + 1] - '0');
+            }else {
+                player.location += 1;
+            }
+        }
+    }else if (answer == "top"){
+        if (player.location <= 39 ) return;
+        else {
+            if (map[player.location - 40 ] >= '0' && map[player.location - 40] <= '4'){
+                player_vs_bot(player, NPC, (int) map[player.location - 40] - '0');
+            }else {
+                player.location -= 40;
+            }
+        }
+    }else if (answer == "bottom"){
+        if (player.location >= map.size() - 40 ) return;
+        else {
+            if (map[player.location + 40 ] >= '0' && map[player.location + 40] <= '4'){
+                player_vs_bot(player, NPC, (int) map[player.location + 40] - '0');
+            }else {
+                player.location += 40;
+            }
+        }
+    }
+
+
+}
+
+void bots_turn(vector<char>& map,character& player, character *NPC, int queue){
+    srand(time(nullptr));
+    int answer = rand() % 4;
+
+    switch (answer) {
+        case 0:
+            if (NPC[queue].location % 39 == 0 || (map[NPC[queue].location + 1] >= '0'
+                    && map[NPC[queue].location + 1] <= '4')) return;
+            else {
+                if (map[NPC[queue].location + 1] == 'P'){
+                    bot_vs_player(player,NPC,queue);
+                }else {
+                        NPC[queue].location += 1;
+                }
+            }
+
+            break;
+        case 1:
+            if (NPC[queue].location % 40 == 0 || (map[NPC[queue].location - 1] >= '0'
+                    && map[NPC[queue].location - 1] <= '4') ) return;
+            else {
+                if (map[NPC[queue].location - 1] == 'P'){
+                    bot_vs_player(player,NPC,queue);
+                }else {
+                    NPC[queue].location -= 1;
+                }
+            }
+
+            break;
+        case 2:
+            if (NPC[queue].location <= 39 || (map[NPC[queue].location + 1] >= '0'
+                    && map[NPC[queue].location + 1] <= '4') ) return;
+            else {
+                if ( map[NPC[queue].location - 40 ] == 'P' ){
+                    bot_vs_player(player,NPC,queue);
+                }else NPC[queue].location -= 40;
+            }
+            break;
+        case 3:
+            if (NPC[queue].location >= map.size() - 40 || (map[NPC[queue].location + 40] >= '0'
+                    && map[NPC[queue].location + 40] <= '4')) return;
+            else {
+                if (map[NPC[queue].location + 40]== 'P'){
+                    bot_vs_player(player,NPC,queue);
+                }else NPC[queue].location += 40;
+            }
+            break;
+        default:
+            break;
+    }
+}
+
+
+void process_game (vector<char>& map, character& player, character *NPC){
+
+    while (!game_over(player, NPC)){
+        death_check(NPC);
+        view_Map(map);
+        players_turn(map,player,NPC);
+        update_location(map,player,NPC);
+        for (int i = 0; i < 5; ++i){
+            bots_turn(map,player,NPC,i);
+        }
+        update_location(map,player,NPC);
+    }
+
+}
+
+
+
 int main() {
-    char map[40*40];
+    std::vector<char> map(40*40, 'Z');
+
     character player;
     character NPC[5];
 
     start_game(map, player, NPC);
+    process_game(map,player,NPC);
 
-
-
-    for (int i = 0; i < (40*40); ++i ){
-        if (i % 40 == 0 ) cout << endl;
-        if (map[i] == '0' || map[i] == '1' || map[i] == '2' || map[i] == '3' || map[i] == '4') cout << 'E';
-        else cout << map[i];
-    }
-
-
-
-
+    cout << "\n\n\tGame Result:\n\n";
+    if (player.health <= 0) cout << "End of the game you've lost! =(\n";
+    else cout << "Congratulations, you WON!!";
 
     return 0;
 }

@@ -11,13 +11,9 @@
 
 int main() {
     using namespace std;
+    char a = '2';
 
-
-    char cha [20];
-
-    cha[10] = '0' + 5;
-
-    cout << cha[10];
+    cout << (int) a - '0';
 
     return 0;
 }
