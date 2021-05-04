@@ -7,13 +7,23 @@
 #include <fstream>
 
 
-
+struct a {
+    std::vector<int> x;
+};
 
 int main() {
     using namespace std;
-    char a = '2';
 
-    cout << (int) a - '0';
+    a hi;
+    for (int i = 0;i < 6 ; ++i) {
+        int t;
+        cin >> t;
+        hi.x.push_back(t);
+    }
+
+    for (int i = 0; i< hi.x.size(); ++i){
+        cout << hi.x[i] << endl;
+    }
 
     return 0;
 }
