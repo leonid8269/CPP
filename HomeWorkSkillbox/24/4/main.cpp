@@ -239,31 +239,38 @@ void players_turn (vector<char>& map,character& player, character *NPC){
         players_turn(map,player,NPC);
     }else if (answer == "load") {
         load_game(map, player, NPC);
+        view_Map(map);
         players_turn(map,player,NPC);
+
+
     }else if (answer == "left") {
         if (player.location % 40 == 0) return;
         else {
             if (map[player.location - 1] >= '0' && map[player.location - 1] <= '4'){
                 player_vs_bot(player, NPC, (int) map[player.location - 1] - '0');
+                update_location(map,player,NPC);
             }else {
                 player.location -= 1;
             }
         }
 
     }else if (answer == "right") {
-        if (player.location % 39 == 0) return;
+        if (player.location + 1 % 40 == 0) return;
         else {
             if (map[player.location + 1] >= '0' && map[player.location + 1] <= '4'){
                 player_vs_bot(player, NPC, (int) map[player.location + 1] - '0');
+                update_location(map,player,NPC);
+
             }else {
                 player.location += 1;
             }
         }
     }else if (answer == "top"){
-        if (player.location <= 39 ) return;
+        if (player.location <= 40 ) return;
         else {
             if (map[player.location - 40 ] >= '0' && map[player.location - 40] <= '4'){
                 player_vs_bot(player, NPC, (int) map[player.location - 40] - '0');
+                update_location(map,player,NPC);
             }else {
                 player.location -= 40;
             }
@@ -273,59 +280,63 @@ void players_turn (vector<char>& map,character& player, character *NPC){
         else {
             if (map[player.location + 40 ] >= '0' && map[player.location + 40] <= '4'){
                 player_vs_bot(player, NPC, (int) map[player.location + 40] - '0');
+                update_location(map,player,NPC);
             }else {
                 player.location += 40;
             }
         }
     }
-
-
 }
 
 void bots_turn(vector<char>& map,character& player, character *NPC, int queue){
     srand(time(nullptr));
-    int answer = rand() % 4;
+    if (NPC[queue].location < 0) return; // костыль... после смерти одного из ботов был Segmentation_Fault
+     int answer = rand() % 4;
 
     switch (answer) {
-        case 0:
-            if (NPC[queue].location % 39 == 0 || (map[NPC[queue].location + 1] >= '0'
+        case 0: // right
+            if (NPC[queue].location + 1 % 40 == 0 || (map[NPC[queue].location + 1] >= '0'
                     && map[NPC[queue].location + 1] <= '4')) return;
             else {
                 if (map[NPC[queue].location + 1] == 'P'){
                     bot_vs_player(player,NPC,queue);
+                    update_location(map,player,NPC);
                 }else {
                         NPC[queue].location += 1;
                 }
             }
 
             break;
-        case 1:
-            if (NPC[queue].location % 40 == 0 || (map[NPC[queue].location - 1] >= '0'
+        case 1: // left
+            if ((NPC[queue].location % 40 == 0 ) || (map[NPC[queue].location - 1] >= '0'
                     && map[NPC[queue].location - 1] <= '4') ) return;
             else {
                 if (map[NPC[queue].location - 1] == 'P'){
                     bot_vs_player(player,NPC,queue);
+                    update_location(map,player,NPC);
                 }else {
                     NPC[queue].location -= 1;
                 }
             }
 
             break;
-        case 2:
-            if (NPC[queue].location <= 39 || (map[NPC[queue].location + 1] >= '0'
+        case 2: // top
+            if (NPC[queue].location <=  40 || (map[NPC[queue].location + 1] >= '0'
                     && map[NPC[queue].location + 1] <= '4') ) return;
             else {
                 if ( map[NPC[queue].location - 40 ] == 'P' ){
                     bot_vs_player(player,NPC,queue);
+                    update_location(map,player,NPC);
                 }else NPC[queue].location -= 40;
             }
             break;
-        case 3:
-            if (NPC[queue].location >= map.size() - 40 || (map[NPC[queue].location + 40] >= '0'
+        case 3: // bottom
+            if (NPC[queue].location >=  map.size() - 40 || (map[NPC[queue].location + 40] >= '0'
                     && map[NPC[queue].location + 40] <= '4')) return;
             else {
                 if (map[NPC[queue].location + 40]== 'P'){
                     bot_vs_player(player,NPC,queue);
+                    update_location(map,player,NPC);
                 }else NPC[queue].location += 40;
             }
             break;
