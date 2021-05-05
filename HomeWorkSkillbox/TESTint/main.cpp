@@ -13,17 +13,10 @@ struct a {
 
 int main() {
     using namespace std;
+    double a;
+    int x = 9, y = 2;
 
-    a hi;
-    for (int i = 0;i < 6 ; ++i) {
-        int t;
-        cin >> t;
-        hi.x.push_back(t);
-    }
-
-    for (int i = 0; i< hi.x.size(); ++i){
-        cout << hi.x[i] << endl;
-    }
-
+    a = (double)x / y;
+    cout << a;
     return 0;
 }
