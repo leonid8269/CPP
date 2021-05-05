@@ -38,9 +38,24 @@ int main() {
             }
                 break;
             case 2:
-                //! узнать фамилию абонента по номеру телефона
+            {
+
+                std::string number;
+                std::cout << "Enter the number of the subscriber whose name you want to find out:\n";
+                std::cin >> number;
+
+                int count = 0;
+                for (std::map<std::string, std::string>::iterator it = tel_guide.begin();
+                     it != tel_guide.end(); ++it) {
+                    if (it->first == number) {
+                        std::cout << "Result: " << it->second << std::endl;
+                    }
+                }
+
+            }
                 break;
-            case 3: {
+            case 3:
+            {
                 std::string name_seek;
                 std::cout << "Enter the name of the subscriber whose number you want to find out:\n";
                 std::cin >> name_seek;
