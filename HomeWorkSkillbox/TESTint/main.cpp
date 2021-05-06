@@ -7,38 +7,24 @@
 #include <fstream>
 #include <map>
 
-struct bot{
-    std::string name = "Mudak#";
-    int health{};
-    int armor{};
-    int location{};
-};
 
 
 int main() {
 
-  std::vector<bot> bots(5);
+    std::map<int, std::string> maps;
+    maps.insert(std::pair<int,std::string>(1, "f"));
+    maps.insert(std::pair<int,std::string>(2, "b"));
+    maps.insert(std::pair<int,std::string>(3, "d"));
+    maps.insert(std::pair<int,std::string>(4, "a"));
+    maps.insert(std::pair<int,std::string>(5, "e"));
+    maps.insert(std::pair<int,std::string>(6, "c"));
 
-    for (int i = 1; i != bots.size(); ++i){
-        bots[i].name += '0' + i;
-        bots[i].health = 10*i;
-        bots[i].armor = 5*i;
-        bots[i].location = i;
-    }
+    for (std::map<int, std::string>::iterator it = maps.begin();
+            it!=maps.end();++it){
 
-
-    for(int i = 0; i < bots.size(); ++i) {
-        std::cout << bots[i].name << " " << bots[i].health << " " << bots[i].armor << " " << bots[i].location << std::endl;
-    }
-    std::cout << std::endl;
-
-
-    bots.erase(bots.begin()+1);
-
-    for(int i = 0; i < bots.size(); ++i) {
-        std::cout << bots[i].name << " " << bots[i].health << " " << bots[i].armor << " " << bots[i].location << std::endl;
     }
 
 
     return 0;
+
 }
