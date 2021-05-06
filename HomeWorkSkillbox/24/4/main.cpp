@@ -97,7 +97,7 @@ void save_game( character& player, std::vector<character>& NPC){
     save << player.name << " " << player.health << " " << player.armor << " " << player.damage << " "
             << player.location << endl; // вторая строчка инфа игрока
 
-    for(int i = 0; i < 5; ++i) save << NPC[i].name << " " << NPC[i].health << " " << NPC[i].armor << " "
+    for(int i = 0; i < number_of_bots; ++i) save << NPC[i].name << " " << NPC[i].health << " " << NPC[i].armor << " "
                                     << NPC[i].damage << " " << NPC[i].location << endl; // 3-7 строчки инфа по врагам.
     save.close();
     cout << "You saved successfully!\n";
@@ -158,16 +158,6 @@ bool game_over(character& player, std::vector<character>& NPC){
 
     return true;
 }
-/*!
-void death_check(std::vector<character>& NPC){
-    for (int queue = 0; queue < number_of_bots ; queue++){
-        if (NPC[queue].health <= 0) {
-            NPC.erase(NPC.begin())
-        }
-    }
-}
-*/
-
 
 void player_vs_bot (character& player, std::vector<character>& NPC, int queue){ // если передавать значения по адресу то нужно обращатся к полям через -> а если чреез ссылку то через точку
     cout << NPC[queue].name << " took damage: -" << player.damage << endl;
@@ -179,8 +169,9 @@ void player_vs_bot (character& player, std::vector<character>& NPC, int queue){ 
 
     if (NPC[queue].health <= 0){
         NPC.erase(NPC.begin() + queue);
-
+        number_of_bots = NPC.size();
     }
+
 
 }
 
@@ -222,7 +213,7 @@ void players_turn (vector<char>& map,character& player, std::vector<character>& 
         }
 
     }else if (answer == "right") {
-        if (player.location + 1 % 40 == 0) return;
+        if ((player.location + 1) % 40 == 0) return;
         else {
             if (map[player.location + 1] >= '0' && map[player.location + 1] <= '4'){
                 player_vs_bot(player, NPC, (int) map[player.location + 1] - '0');
@@ -257,12 +248,11 @@ void players_turn (vector<char>& map,character& player, std::vector<character>& 
 
 void bots_turn(vector<char>& map,character& player,  std::vector<character>& NPC, int queue){
     srand(time(nullptr));
-    if (NPC[queue].location < 0) return; // костыль... после смерти одного из ботов был Segmentation_Fault
      int answer = rand() % 4;
 
     switch (answer) {
         case 0: // right
-            if (NPC[queue].location + 1 % 40 == 0 || (map[NPC[queue].location + 1] >= '0'
+            if ((NPC[queue].location + 1) % 40 == 0 || (map[NPC[queue].location + 1] >= '0'
                     && map[NPC[queue].location + 1] <= '4')) return;
             else {
                 if (map[NPC[queue].location + 1] == 'P'){
@@ -313,15 +303,15 @@ void bots_turn(vector<char>& map,character& player,  std::vector<character>& NPC
 }
 
 
-void process_game (vector<char>& map, character& player,  std::vector<character>& NPC){
+void process_game (vector<char>& map, character& player, std::vector<character>& NPC){
 
     while (!game_over(player, NPC)){
-        //! death_check(NPC);
         view_Map(map);
         players_turn(map,player,NPC);
         update_location(map,player,NPC);
+
         for (int i = 0; i < number_of_bots; ++i){
-            bots_turn(map,player,NPC,i);
+            bots_turn(map,player,NPC, i);
         }
         update_location(map,player,NPC);
     }
@@ -329,10 +319,10 @@ void process_game (vector<char>& map, character& player,  std::vector<character>
 }
 
 int main() {
-    std::vector<char> map(size_map, 'Z');
+    std::vector<char>       map(size_map, 'Z');
+    std::vector<character>  NPC(number_of_bots);
 
     character player;
-    std::vector<character> NPC (number_of_bots);
 
     start_game(map, player, NPC);
     process_game(map,player,NPC);

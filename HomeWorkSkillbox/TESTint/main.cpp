@@ -7,21 +7,38 @@
 #include <fstream>
 #include <map>
 
+struct bot{
+    std::string name = "Mudak#";
+    int health{};
+    int armor{};
+    int location{};
+};
+
 
 int main() {
 
-  std::vector<int> vec {1,2,3,4,5};
+  std::vector<bot> bots(5);
 
-  for (uint8_t i = 0; i < vec.size(); ++i){
-      std::cout << vec[i] << " ";
-  }
-  std::cout << std::endl;
-
-  vec.erase(vec.cbegin() + 2);
-
-    for (uint8_t i = 0; i < vec.size(); ++i){
-        std::cout << vec[i] << " ";
+    for (int i = 1; i != bots.size(); ++i){
+        bots[i].name += '0' + i;
+        bots[i].health = 10*i;
+        bots[i].armor = 5*i;
+        bots[i].location = i;
     }
+
+
+    for(int i = 0; i < bots.size(); ++i) {
+        std::cout << bots[i].name << " " << bots[i].health << " " << bots[i].armor << " " << bots[i].location << std::endl;
+    }
+    std::cout << std::endl;
+
+
+    bots.erase(bots.begin()+1);
+
+    for(int i = 0; i < bots.size(); ++i) {
+        std::cout << bots[i].name << " " << bots[i].health << " " << bots[i].armor << " " << bots[i].location << std::endl;
+    }
+
 
     return 0;
 }
