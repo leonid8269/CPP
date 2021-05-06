@@ -9,25 +9,19 @@
 
 
 int main() {
-   std::map<std::string, std::string> maps;
 
-    maps.insert(std::pair<std::string, std::string>("1", "1"));
-    maps.insert(std::pair<std::string, std::string>("2", "2"));
-    maps.insert(std::pair<std::string, std::string>("3", "3"));
-    maps.insert(std::pair<std::string, std::string>("1", "1"));
-    maps.insert(std::pair<std::string, std::string>("2", "2"));
-    maps.insert(std::pair<std::string, std::string>("3", "3"));
-    maps.insert(std::pair<std::string, std::string>("4", "4"));
-    maps.insert(std::pair<std::string, std::string>("4", "4"));
+  std::vector<int> vec {1,2,3,4,5};
 
+  for (uint8_t i = 0; i < vec.size(); ++i){
+      std::cout << vec[i] << " ";
+  }
+  std::cout << std::endl;
 
-    for (std::map<std::string,std::string>::iterator it = maps.begin();
-            it != maps.end(); ++it){
-        std::cout << it->first << " " << it->second << std::endl;
+  vec.erase(vec.cbegin() + 2);
+
+    for (uint8_t i = 0; i < vec.size(); ++i){
+        std::cout << vec[i] << " ";
     }
-
-
-
 
     return 0;
 }

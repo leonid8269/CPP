@@ -1,49 +1,5 @@
-/*!
- *
- *
-Игра происходит на карте размером 40 на 40 клеток. По клеткам перемещаются враги и персонаж игрока.
-После каждого хода игрока карта показывается вновь со всеми врагами на ней.
-Игрок помечается буквой P. Враги буквой E. Пустые места — точкой.
-Каждый персонаж игры представлен в виде структуры с полями: имя, жизни, броня, урон.
-Вначале игры создаются 5 случайных врагов в случайных клетках карты.
-Врагам задаются в формате “Enemy #N”, где N — это порядковый номер врага.
-Уровень жизней врагам задаётся случайно, от 50 до 150.
-Уровень брони варьируется от 0 до 50. Урон тоже выбирается случайно от 15 до 30 единиц.
-Игрок конструирует своего персонажа самостоятельно. Задаёт все его параметры, включая имя.
-Все персонажи появляются в случайных местах карты.
-Игрок осуществляет ход с помощью команд: left, right, top, bottom.
-В зависимости от команды и выбирается направление перемещения персонажа: влево, вправо, вверх, вниз.
-Враги перемещаются в случайном направлении.
-Если персонаж (враг или игрок) перемещается в сторону, где уже находится какой-то персонаж,
-то он бьёт этого персонажа с помощью своего урона. Враги при этом никогда не бьют врагов,
-а просто пропускают ход и остаются на своём месте.
-За пределы карты (40 на 40 клеток) ходить нельзя никому.
-Если кто-то выбрал направление за гранью дозволенного, ход пропускается.
-Формула для расчёта урона совпадает с той, что была в самом уроке.
-Жизни уменьшаются на оставшийся после брони урон.
-При этом сама броня тоже сокращается на приведённый урон.
-Игра заканчивается тогда, когда либо умирают все враги, либо персонаж игрока.
-В первом случае на экран выводится сообщение о поражении, во втором — победа.
-Если в начале хода игрок вводит команду save или load вместо направления перемещения,
-то игра либо делает сохранение своего состояния в файл,
-либо загружает это состояние из файла соответственно.
-
-Советы и рекомендации
-Для определения команды персонажа можно завести специальный флаг внутри структуры данных персонажа.
-
-Для отображения координат персонажей можете использовать структуру вектора из другой задачи,
-но заменить типы координат.
- *
- * */
-
-
-
-
-
-
-
 #include <iostream>
-#include <ctime> //     srand(time(nullptr)); чтобы рандом был разный с каждым разом)
+#include <ctime>
 #include <string>
 #include <fstream>
 #include <vector>
@@ -56,7 +12,6 @@ using std::string;
 using std::vector;
 
 struct character{
-
     string name;
     int health{};
     int armor{};
@@ -65,12 +20,16 @@ struct character{
     int location{}; // расположение в массиве чаров
 };
 
+uint8_t number_of_bots = 5;
+const uint16_t size_map = 40*40;
 
-void update_location (vector<char>& map, character& player, character *NPC ){ // применяется при каждом изменении позиции
+
+
+void update_location (vector<char>& map, character& player, std::vector<character>& NPC){ // применяется при каждом изменении позиции
     for (int i = 0 ; i < map.size(); ++i ){
         map[i] = '.';
         if (i == player.location) map[i] = 'P';
-        for(int k = 0; k < 5; ++k)
+        for(int k = 0; k < number_of_bots; ++k)
             if (i == NPC[k].location) map[i] = '0' + k;
     }
 }
@@ -79,7 +38,7 @@ void update_location (vector<char>& map, character& player, character *NPC ){ //
 void view_Map(vector<char>& map){
     for (int i = 0; i < map.size(); ++i ){
         if (i % (int)sqrt(map.size()) == 0 ) cout << endl;
-        if (map[i] == '0' || map[i] == '1' || map[i] == '2' || map[i] == '3' || map[i] == '4') cout << 'E';
+        if (map[i] >= '0' && map[i] <= '4') cout << 'E';
         else cout << map[i];
     }
     cout << endl;
@@ -87,12 +46,12 @@ void view_Map(vector<char>& map){
 }
 
 
-void location_initialization(character& player, character *NPC){ // расставлю персонажей, с проверкой на совпадения и соприкосновения
+void location_initialization(character& player, std::vector<character>& NPC){ // расставлю персонажей, с проверкой на совпадения и соприкосновения
     srand(time(nullptr));
     while (true){
-        player.location = rand() % (40*40);
-        for (int i = 0;i < 5 ;++i) {
-            NPC[i].location = rand() % (40 * 40);
+        player.location = rand() % size_map;
+        for (int i = 0; i < number_of_bots; ++i) {
+            NPC[i].location = rand() % size_map;
             if (NPC[i].location == player.location || NPC[i].location == player.location + 1 ||
                     NPC[i].location == player.location - 1 || NPC[i].location == player.location - 30 ||
                     NPC[i].location == player.location + 30) continue;
@@ -101,7 +60,7 @@ void location_initialization(character& player, character *NPC){ // расста
     }
 }
 
-void new_game(vector<char>& map, character& player, character *NPC){
+void new_game(vector<char>& map, character& player, std::vector<character>& NPC){
 
     cout  << "Enter the name your character: \n";
     cin >>  player.name;
@@ -121,18 +80,18 @@ void new_game(vector<char>& map, character& player, character *NPC){
     cout << "\n\nGood soldier! Good hunting!!\n\n";
 
     srand(time(nullptr));
-    for (int i = 0; i < 5; ++i){
+    for (int i = 0; i < number_of_bots; ++i){
         NPC[i].name = "Enemy#" +  std::to_string( i + 1);
-        NPC[i].health = rand() % 150 + 50;
-        NPC[i].armor  = rand() % 50;
-        NPC[i].damage = rand() % 30 + 15;
+        NPC[i].health = rand() % 151 + 50;
+        NPC[i].armor  = rand() % 51;
+        NPC[i].damage = rand() % 31 + 15;
     }
 
     location_initialization(player, NPC); // проверяет чтобы не попасть в одно и тоже место...
     update_location(map, player, NPC);  // расставляет фигурки
 }
 
-void save_game( character& player, character *NPC){
+void save_game( character& player, std::vector<character>& NPC){
 
     std::ofstream save ("..\\save.bin", std::ios::binary);
     save << player.name << " " << player.health << " " << player.armor << " " << player.damage << " "
@@ -144,29 +103,31 @@ void save_game( character& player, character *NPC){
     cout << "You saved successfully!\n";
 }
 
-void load_game(vector<char>& map, character& player, character *NPC){
+bool load_game(vector<char>& map, character& player, std::vector<character>& NPC){
 
     std::ifstream load ("..\\save.bin", std::ios::binary);
     if(!load.is_open()){
         cout << "Not found a save-game!! Start a New-Game? (y\\n)\n";
         char answer;
         cin >> answer;
-        if(answer == 'y') new_game(map, player, NPC);
+        if(answer == 'y') return true;
         else {
             cout << "Goodbye!!";
-            exit(1);                                                                    //! точка выхода 1;
+            return false;
         }
     }else {
       load >> player.name >> player.health >> player.armor >> player.damage >> player.location;
-      for (int i = 0;i < 5 ;++i) load >> NPC[i].name >> NPC[i].health >> NPC[i].armor >> NPC[i].damage
+      for (int i = 0;i < number_of_bots ;++i) load >> NPC[i].name >> NPC[i].health >> NPC[i].armor >> NPC[i].damage
                                         >> NPC[i].location;
     }
 
     load.close();
     update_location(map,player,NPC);
+
+    return false;
 }
 
-void start_game(vector<char>& map, character& player, character *NPC){
+void start_game(vector<char>& map, character& player, std::vector<character>& NPC){
     cout << "Hello! You want to begin a 'new' game or 'load'?\n";
     string answer {};
 
@@ -179,8 +140,9 @@ void start_game(vector<char>& map, character& player, character *NPC){
             break;
         }
         else if (answer == "load"){
-            load_game(map,player, NPC);
-            update_location(map, player, NPC);
+            if (load_game(map,player, NPC)){
+                new_game(map,player, NPC);
+            }
             break;
         }
         else {
@@ -190,23 +152,24 @@ void start_game(vector<char>& map, character& player, character *NPC){
     }
 }
 
-bool game_over(character& player, character *NPC){
+bool game_over(character& player, std::vector<character>& NPC){
     if (player.health <= 0) return true;
-    for(int i = 0 ; i < 5; ++i) if (NPC[i].health > 0 ) return false;
+    for(int i = 0 ; i < number_of_bots; ++i) if (NPC[i].health > 0 ) return false;
 
     return true;
 }
-
-void death_check(character *NPC){
-    for (int queue = 0;queue< 5 ; queue++){
+/*!
+void death_check(std::vector<character>& NPC){
+    for (int queue = 0; queue < number_of_bots ; queue++){
         if (NPC[queue].health <= 0) {
-            NPC[queue].location = -99999; //
-            NPC[queue].name = "!!DEAD!!";
+            NPC.erase(NPC.begin())
         }
     }
 }
+*/
 
-void player_vs_bot (character& player, character *NPC, int queue){ // если передавать значения по адресу то нужно обращатся к полям через -> а если чреез ссылку то через точку
+
+void player_vs_bot (character& player, std::vector<character>& NPC, int queue){ // если передавать значения по адресу то нужно обращатся к полям через -> а если чреез ссылку то через точку
     cout << NPC[queue].name << " took damage: -" << player.damage << endl;
     NPC[queue].armor -= player.damage;
     if(NPC[queue].armor < 0){
@@ -214,10 +177,14 @@ void player_vs_bot (character& player, character *NPC, int queue){ // если �
         NPC[queue].armor = 0;
     }
 
+    if (NPC[queue].health <= 0){
+        NPC.erase(NPC.begin() + queue);
+
+    }
 
 }
 
-void bot_vs_player (character& player, character *NPC, int queue){
+void bot_vs_player (character& player, std::vector<character>& NPC, int queue){
 
     cout << player.name << " took damage: -" << NPC[queue].damage << std::endl;
     player.armor -= NPC[queue].damage;
@@ -227,7 +194,7 @@ void bot_vs_player (character& player, character *NPC, int queue){
     }
 }
 
-void players_turn (vector<char>& map,character& player, character *NPC){
+void players_turn (vector<char>& map,character& player, std::vector<character>& NPC){
     string answer;
     cout << "Enter the command:\n";
     do cin >> answer;
@@ -288,7 +255,7 @@ void players_turn (vector<char>& map,character& player, character *NPC){
     }
 }
 
-void bots_turn(vector<char>& map,character& player, character *NPC, int queue){
+void bots_turn(vector<char>& map,character& player,  std::vector<character>& NPC, int queue){
     srand(time(nullptr));
     if (NPC[queue].location < 0) return; // костыль... после смерти одного из ботов был Segmentation_Fault
      int answer = rand() % 4;
@@ -346,14 +313,14 @@ void bots_turn(vector<char>& map,character& player, character *NPC, int queue){
 }
 
 
-void process_game (vector<char>& map, character& player, character *NPC){
+void process_game (vector<char>& map, character& player,  std::vector<character>& NPC){
 
     while (!game_over(player, NPC)){
-        death_check(NPC);
+        //! death_check(NPC);
         view_Map(map);
         players_turn(map,player,NPC);
         update_location(map,player,NPC);
-        for (int i = 0; i < 5; ++i){
+        for (int i = 0; i < number_of_bots; ++i){
             bots_turn(map,player,NPC,i);
         }
         update_location(map,player,NPC);
@@ -361,13 +328,11 @@ void process_game (vector<char>& map, character& player, character *NPC){
 
 }
 
-//! Основные проблемы - перепрыгивают сквозь поле если масимально справа, бот после <0 здоровья умирает только через 4 хода
-
 int main() {
-    std::vector<char> map(40*40, 'Z');
+    std::vector<char> map(size_map, 'Z');
 
     character player;
-    character NPC[5];
+    std::vector<character> NPC (number_of_bots);
 
     start_game(map, player, NPC);
     process_game(map,player,NPC);
