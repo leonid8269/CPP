@@ -7,7 +7,7 @@
 
 int main() {
     std::map<int, std::string> oMap;
-    oMap.insert(std::make_pair<int,std::string>(23,"fin"));
+    oMap.insert(std::make_pair<int, std::string>(23,"fin"));
     oMap.insert(std::make_pair<int, std::string>(25, "fuck"));
     oMap.insert(std::make_pair<int, std::string>(15, "suck"));
     oMap.insert(std::make_pair<int, std::string>(12, "bitch"));
@@ -16,7 +16,7 @@ int main() {
     oMap.insert(std::make_pair<int, std::string>(16, "hello"));
     oMap.insert(std::make_pair<int, std::string>(10, "end"));
 
-    for (std::map<int,std::string>::iterator name_it = oMap.begin();
+		for (std::map<int,std::string>::iterator name_it = oMap.begin();
     name_it != oMap.end(); ++name_it)
         std::cout << name_it->first << " " << name_it-> second << std::endl;
 
