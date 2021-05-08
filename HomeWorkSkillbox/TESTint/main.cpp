@@ -1,20 +1,12 @@
 #include <iostream>
-#include <cstdlib>
-#include <vector>
-#include <cmath>
-#include <sstream>
-#include <ctime>
-#include <fstream>
-#include <map>
+
+#define WORD "Hello "
+#define OUTER(...) WORD #__VA_ARGS__
+
+int main(){
 
 
 
-int main() {
-
-    char16_t a = 'b';
-    std::cout << a;
-
-
-    return 0;
-
+    std::cout << OUTER(lol) << '\n';
+    std::cout << OUTER(hg) << '\n';
 }
