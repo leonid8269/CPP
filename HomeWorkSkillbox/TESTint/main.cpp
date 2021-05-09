@@ -1,12 +1,9 @@
 #include <iostream>
 
-#define WORD "Hello "
-#define OUTER(...) WORD #__VA_ARGS__
+#define WORD ""
+#define NAME(x) #x
 
 int main(){
 
-
-
-    std::cout << OUTER(lol) << '\n';
-    std::cout << OUTER(hg) << '\n';
+    std::cout << NAME(WORD);
 }
