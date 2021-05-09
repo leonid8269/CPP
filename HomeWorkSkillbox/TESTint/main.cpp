@@ -3,7 +3,11 @@
 #define WORD ""
 #define NAME(x) #x
 
+
 int main(){
 
-    std::cout << NAME(WORD);
+    int arr[10];
+    std::cout << sizeof arr / 4;
+
+    return 0;
 }
