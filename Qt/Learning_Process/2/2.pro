@@ -1,4 +1,4 @@
-QT -= gui
+QT -= gui // эта строка отключает модуль QT GUI отвечающий за графический  интерфейс пользотвателя
 
 CONFIG += c++11 console
 CONFIG -= app_bundle

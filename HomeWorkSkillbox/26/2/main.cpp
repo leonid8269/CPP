@@ -16,8 +16,5 @@ int main() {
     CROWDED(train)
     VOID(train)
     FULLNESS(train)
-
-
-
     return 0;
 }
