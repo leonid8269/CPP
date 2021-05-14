@@ -1,6 +1,6 @@
 #include <iostream>
 
-#define SPRING 1
+#define SPRING 0
 #define SUMMER 0
 #define AUTUMN 0
 #define WINTER 0

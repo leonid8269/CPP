@@ -7,7 +7,9 @@
 #define FRIDAY 5
 #define SATURDAY 6
 #define SUNDAY 7
-#define NAME(x) #x
+#define GET(a, b) a ##_## b
+
+
 
 
 int main() {
@@ -16,27 +18,36 @@ int main() {
     int ans;
     std::cin >> ans;
 
+    std::string day_one ;
+
     switch (ans) {
         case MONDAY:
-            std::cout << NAME(MONDAY);
+            GET(day ,one) = "Monday";
+            std::cout << GET(day ,one);
             break;
         case TUESDAY:
-            std::cout << NAME(TUESDAY);
+            GET(day ,one) = "Tuesday";
+            std::cout << GET(day ,one);
             break;
         case WEDNESDAY:
-            std::cout << NAME(WEDNESDAY);
+            GET(day ,one) = "Wednesday";
+            std::cout << GET(day ,one);
             break;
         case THURSDAY:
-            std::cout << NAME(THURSDAY);
+            GET(day ,one) = "Thursday";
+            std::cout << GET(day ,one);
             break;
         case FRIDAY:
-            std::cout << NAME(FRIDAY);
+            GET(day ,one) = "Friday";
+            std::cout << GET(day ,one);
             break;
         case SATURDAY:
-            std::cout << NAME(SATURDAY);
+            GET(day ,one) = "Saturday";
+            std::cout << GET(day ,one);
             break;
         case SUNDAY:
-            std::cout << NAME(SUNDAY);
+            GET(day ,one) = "Sunday";
+            std::cout << GET(day ,one);
             break;
         default:
             std::cout << "There is no such day of the week!\a\n";
