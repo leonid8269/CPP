@@ -5,16 +5,16 @@
 #include <sstream>
 
 enum {
-    START,
+    START, //элементы массива конечное и начальное время задачи и дельта
     STOP
 };
 
 struct s_task {
-    time_t time[2]{};
-    double time_execute{};
-
-    uint8_t hour[2]{}, min[2]{};
     std::string name;
+    time_t time[2]{};
+    uint8_t hour[2]{}, min[2]{};
+    std::time_t execute{};
+
     bool flag_process{}; // если флаг тру значит задача выполняется
 };
 
@@ -51,11 +51,13 @@ void end_task(s_task& task){
     time_label(task, STOP);
 
     task.flag_process = false; // закончился прогресс этой задачи
-    task.time_execute = difftime(task.time[STOP], task.time[START]);
+
+    task.execute = task.time[STOP] - task.time[START];
+    std::tm* exe = std::localtime(&task.execute);
 
     std::ofstream save("..\\save.txt", std::ios::app);
     save << "Stop time ["<< std::to_string (task.hour[STOP]) << ':' << std::to_string (task.min[STOP]) << "] " <<
-    "Executed per second = " << task.time_execute << " sec."<< std::endl;
+    "Executed per second = " << std::put_time(exe,"[%M:%S]") << " min:sec."<< std::endl;
     save.close();
 }
 
