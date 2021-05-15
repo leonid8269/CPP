@@ -6,58 +6,49 @@
 
 enum {
     START, //элементы массива конечное и начальное время задачи и дельта
-    STOP
+    STOP,
+    EXECUTE
 };
 
 struct s_task {
     std::string name;
-    time_t time[2]{};
-    uint8_t hour[2]{}, min[2]{};
-    std::time_t execute{};
+    time_t time[3]{};
 
     bool flag_process{}; // если флаг тру значит задача выполняется
 };
 
 
-void time_label (s_task &task, uint8_t value){
-    task.time[value] = std::time(nullptr);
-    std::tm* local = std::localtime(&task.time[value]);
-
-    task.hour[value] = local->tm_hour;
-    task.min[value] = local->tm_min;
-
-}
-
-     //! начало задачи, то есть определяется время начала и название
-void start_task(s_task& task){
+void start_task(s_task& task){                // начало задачи, то есть определяется время начала и название
     std::cout << "Enter the name of the task: \n";
-
     std::cin.ignore();
     getline(std::cin, task.name);
 
-
-    time_label(task, START);
     task.flag_process = true;
 
-    std::ofstream save("..\\save.txt", std::ios::app);
-    save << "Start time [" << std::to_string (task.hour[START]) << ':' << std::to_string (task.min[START]) <<
-            "] name a task \"" << task.name << "\" ";
-    save.close();
+    task.time[START] = std::time(nullptr);
+    std::tm* start = std::localtime(&task.time[START]);
 
+    std::ofstream save("..\\save.txt", std::ios::app);
+    save << "Start time " << std::put_time(start, "[%H:%M]") << " name a task \"" << task.name << "\" ";
+    save.close();
 
 }
 
 void end_task(s_task& task){
-    time_label(task, STOP);
-
+    task.time[STOP] = std::time(nullptr);
     task.flag_process = false; // закончился прогресс этой задачи
 
-    task.execute = task.time[STOP] - task.time[START];
-    std::tm* exe = std::localtime(&task.execute);
+  //! тут баг, 45,46 строчки поменяй местами и поймёшь ан выводе
+    double delta = std::difftime(task.time[STOP], task.time[START]);
+    task.time[EXECUTE] = (std::time_t) delta;
+
+    std::tm* stop = std::localtime ( &task.time[STOP] );
+    std::tm* exec = std::localtime ( &task.time[EXECUTE] );
+
 
     std::ofstream save("..\\save.txt", std::ios::app);
-    save << "Stop time ["<< std::to_string (task.hour[STOP]) << ':' << std::to_string (task.min[STOP]) << "] " <<
-    "Executed per second = " << std::put_time(exe,"[%M:%S]") << " min:sec."<< std::endl;
+    save << "Stop time "<< std::put_time(stop,"[%H:%M]") << " " <<
+    "Executed per second = " << std::put_time(exec,"[%M:%S]") << " min:sec."<< std::endl;
     save.close();
 }
 
