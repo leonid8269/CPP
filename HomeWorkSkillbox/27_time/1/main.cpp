@@ -35,20 +35,21 @@ void start_task(s_task& task){                // начало задачи, то
 }
 
 void end_task(s_task& task){
+
     task.time[STOP] = std::time(nullptr);
+
     task.flag_process = false; // закончился прогресс этой задачи
 
-  //! тут баг, 45,46 строчки поменяй местами и поймёшь ан выводе
+  //! тут баг, 47,48 строчки поменяй местами и поймёшь ан выводе
     double delta = std::difftime(task.time[STOP], task.time[START]);
+
     task.time[EXECUTE] = (std::time_t) delta;
 
-    std::tm* stop = std::localtime ( &task.time[STOP] );
-    std::tm* exec = std::localtime ( &task.time[EXECUTE] );
-
-
     std::ofstream save("..\\save.txt", std::ios::app);
-    save << "Stop time "<< std::put_time(stop,"[%H:%M]") << " " <<
-    "Executed per second = " << std::put_time(exec,"[%M:%S]") << " min:sec."<< std::endl;
+    std::tm* stop = std::localtime ( &task.time[STOP] );
+    save << "Stop time "<< std::put_time(stop,"[%H:%M]") << " ";
+    std::tm* exec = std::localtime ( &task.time[EXECUTE] );
+    save << "Executed per second = " << std::put_time(exec,"[%M:%S]") << " min:sec."<< std::endl;
     save.close();
 }
 
