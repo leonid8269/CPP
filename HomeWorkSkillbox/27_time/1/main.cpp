@@ -40,9 +40,7 @@ void end_task(s_task& task){
 
     task.flag_process = false; // закончился прогресс этой задачи
 
-  //! тут баг, 47,48 строчки поменяй местами и поймёшь ан выводе
     double delta = std::difftime(task.time[STOP], task.time[START]);
-
     task.time[EXECUTE] = (std::time_t) delta;
 
     std::ofstream save("..\\save.txt", std::ios::app);
