@@ -1,34 +1,70 @@
 #include <iostream>
 #include <ctime>
 #include <iomanip>
-#include <map>
 #include <vector>
+#include <fstream>
 
-//Первая мысль которая возникает, программа для пользования на каждый
-// день. зашел - посмотрел вышел. значит, смысла нет не вписывать даты до сегодняшнего дня (ведь по условию их
-// показывать не надо. значить иначе с эти бороться буду)
-//
+enum {
+    YEAR,
+    MONTH,
+    DAY
+};
 
+struct friends{
+    std::string name;
+    int YMD[3]{};
+};
+
+void load (std::vector<friends>& fri){ // Для удобства проверки.
+    std::ifstream file ("..\\load.txt");
+    if (!file.is_open()) std::cout << "ERROR opening file\n\a";
+    else{
+        uint8_t priority = 0;
+        while (file.eof()){
+            fri.emplace_back();
+            file >> fri[priority].name >> fri[priority].YMD[YEAR] >> fri[priority].YMD[MONTH] >> fri[priority].YMD[DAY];
+            priority ++;
+        }
+    }
+    file.close();
+
+}
 
 int main() {
-    std::map<time_t, std::string> map;
+    std::vector<friends> fri(0);
+    uint8_t priority = 0;
+
     std::string ans;
-    while (true){
-        std::cout << "Enter end or name friend\n";
+    do {
+        std::cout << "Enter \"end\" or name\n";
         std::cin >> ans;
         if (ans == "end") break;
+        else if ( ans == "load" && !priority){ //пиши свой список друзей или воспользуйся моим :D
+            load(fri);
+        }
         else {
-            std::cout << "Enter birthday friend\n";
 
+            fri.emplace_back();
+            fri[priority].name = ans;
+            std::cout << "Enter the date of birth YYYY MM DD\n";
+            std::cin >> fri[priority].YMD[YEAR];
+            std::cin >> fri[priority].YMD[MONTH];
+            std::cin >> fri[priority].YMD[DAY];
+        }
+    }while (true);
+
+    time_t t = time(nullptr);
+    std::tm local = *std::localtime(&t);
+
+
+    for (int i = 0; i < fri.size() ; ++i){
+        if ((fri[i].YMD[DAY] == local.tm_mday) &&  (fri[i].YMD[MONTH] == (local.tm_mon + 1)) )
+            std::cout << "Today is the birthday of " << fri[i].name;
+
+        else if ( ){
 
         }
     }
-
-    //map.insert(std::make_pair(time(nullptr),"Today")); // добавил сегодняшний день
-
-    auto it = map.begin();
-    std::tm* lolka = std::localtime(&it->first);
-    std::cout << lolka->tm_mday;
 
 
     return 0;
