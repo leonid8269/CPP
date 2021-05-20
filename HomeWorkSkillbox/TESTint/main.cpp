@@ -8,20 +8,18 @@
 #include <string>
 
 int main (){
-    std::map <std::string, std::string> map;
+
 
     time_t t = time(nullptr);
-    std::tm tm_t = *std::localtime(&t);
+    time_t s = time(nullptr);
 
-    map.insert(std::make_pair( std::to_string(tm_t.tm_mon = 5) + ":" +
-                std::to_string(tm_t.tm_mday = 12), "Lolkaa"));
+    std::tm today = *std::localtime(&s);
+    std::tm t_tm = *std::localtime(&t);
 
-    map.insert(std::make_pair( std::to_string(tm_t.tm_mon = 5) + ":" +
-                std::to_string(tm_t.tm_mday = 6), "lala"));
+    std::cin >> std::get_time(&t_tm, "%Y/%m/%d");
 
 
-    for (auto it = map.begin(); it != map.end(); ++it) std::cout << it->first << std::endl;
-
+    std::cout << "to = " << today.tm_yday << " be = " << t_tm.tm_yday;
 
 
     return 0;
