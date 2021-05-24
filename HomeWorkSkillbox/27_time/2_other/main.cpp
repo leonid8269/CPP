@@ -5,7 +5,6 @@
 #include <string>
 
 #define KEY std::to_string(t_tm.tm_mon + 1) + std::to_string(t_tm.tm_mday)
-#define FIND std::to_string(t_tm.tm_mon + 1) + std::to_string(t_tm.tm_mday)
 
 
 int main() {
@@ -30,7 +29,7 @@ int main() {
 
 
 
-    for(auto it = map.find(FIND) ; it != map.end(); ++it){
+    for(auto it = map.find(KEY) ; it != map.end(); ++it){
         std::cout << it->first << " " << it->second << std::endl;
     }
 
