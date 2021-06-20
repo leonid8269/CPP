@@ -8,4 +8,4 @@ project("Executive simulator" VERSION 1.0.0 )
 set(CMAKE_CXX_STANDARD 14)
 
 # .exe и список файлов
-add_executable(simulator srs/main.cpp include/surg_op.h include/coordinate.h srs/for_operating_room.cpp)
+add_executable(simulator srs/main.cpp include/surg_op.h include/coordinate.h)

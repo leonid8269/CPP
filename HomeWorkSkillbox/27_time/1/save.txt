@@ -1,6 +1,0 @@
-Start time [18:34] name a task "®β¦¨¬ ξαμ ®β ―®€ " Stop time [18:34] Executed per second = 11 sec.
-Start time [09:06] name a task "non name" Stop time [07:00] Executed per second = [00:03] min:sec.
-Start time [09:07] name a task "asdasd" Stop time [09:07] Executed per second = [07:05] min:sec.
-Start time [09:09] name a task "sdfsdf" Stop time [09:09] Executed per second = [09:14] min:sec.
-Start time [09:10] name a task "sdsdf" Stop time [09:10] Executed per second = [10:38] min:sec.
-Start time [09:12] name a task "asdasd" Stop time [09:12] Executed per second = [00:02] min:sec.

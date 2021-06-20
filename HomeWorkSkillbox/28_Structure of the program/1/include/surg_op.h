@@ -3,70 +3,64 @@
 #include "coordinate.h"
 
 
-bool stat[4]{false, false, false, false}; // статус выполнения операции.
-
-// операции производимые хирургом
-enum {
-    ONE_STEP,
-    TWO_STEP,
-    THREE_STEP,
-    FOUR_STEP
-};
-
-
-
-void scalpel (coordinate& coor){
+void scalpel (point& one, point& two){
     std::cout << "Sister Scalpel!\n";
+    std::cout << "Enter the coordinate of the beginning of the cut\n";
+    std::cin >> one.dot[Coord::X] >> one.dot[Coord::Y];
 
-    std::cout << "Enter the coordinate of the beginning of the cut! [x:y]\n";
-    std::cin >> coor.start[X] >> coor.start[Y];
+    std::cout << "Enter the end of the end coordinate! \n";
+    std::cin >> two.dot[Coord::X] >> two.dot[Coord::Y];
 
-    std::cout << "Enter the end of the end coordinate! [x:y]\n";
-    std::cin >> coor.stop[X] >> coor.stop[Y];
+    std::cout << "Good!\n";
 
-    std::cout << "Surgical cut performed!\n";
-    stat[ONE_STEP] = true;
+    stat[Step::ONE] = true;
 }
 
 
-void hemostat (coordinate& coor){
+void hemostat (point& p){
     std::cout << "Sister hemostat\n";
-
     std::cout << "Enter coordinates for clamping\n";
-    std::cin >> coor.start[X] >> coor.start[Y];
 
+    std::cin >> p.dot[Coord::X] >> p.dot[Coord::Y];
     std::cout << "Okay, well go to the next step\n";
 
-    stat[TWO_STEP] = true;
+    stat[Step::TWO] = true;
 }
 
-void tweezers (coordinate& coor){
+void tweezers (point& p){
     std::cout << "Sister, tweezers!!\n";
-
     std::cout << "Enter coordinates for tweezers\n";
-    std::cin >> coor.start[X] >> coor.start[Y];
 
+    std::cin >> p.dot[Coord::X] >> p.dot[Coord::Y];
     std::cout << "Done!\n";
-
-    stat[THREE_STEP] = true;
+    stat[Step::THREE] = true;
 }
 
-bool comparison(const coordinate& coor, const coordinate& old){
-    if (coor.start[X] == old.start[X] && coor.stop[Y] == old.stop[Y]) return true;
+bool comparison(const point& one, const  point& two, const point& old_one, const point& old_two){
+
+    if ((one.dot[Coord::X] == old_one.dot[Coord::X] && one.dot[Coord::Y] == old_one.dot[Coord::Y]) ||
+        (two.dot[Coord::X] == old_two.dot[Coord::X] && two.dot[Coord::Y] == old_two.dot[Coord::Y]) ||
+
+        (one.dot[Coord::X] == old_one.dot[Coord::Y] && one.dot[Coord::Y] == old_one.dot[Coord::X]) ||
+        (two.dot[Coord::X] == old_two.dot[Coord::Y] && two.dot[Coord::Y] == old_two.dot[Coord::X]))
+                return true;
 
     std::cout << "Coordinates did not coincide\n";
     return false;
 }
 
-void suture(coordinate& coor, const coordinate& old){
-
+void suture(point& one, point& two, const point& old_one, const point& old_two){
     std::cout << "Sister, needle!!\n";
+
     do {
-        std::cout << "Enter first coordinate!\n";
-        std::cin >> coor.start[X] >> coor.start[Y];
-        std::cin >> coor.stop[X] >> coor.stop[Y];
-    }while(!comparison(coor, old));
+        std::cout << "Enter the first coordinate: \n";
+        std::cin >> one.dot[Coord::X] >> one.dot[Coord::Y];
+
+        std::cout << "Enter the second coordinate: \n";
+        std::cin >> two.dot[Coord::X] >> two.dot[Coord::Y];
 
 
-    stat[FOUR_STEP] = true;
+    }while(!comparison(one, two, old_one, old_two));
+
+    stat[Step::FOUR] = true;
 }
