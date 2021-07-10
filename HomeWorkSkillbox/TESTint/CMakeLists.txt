@@ -3,4 +3,4 @@ project(TESTint)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(TESTint main.cpp)
+add_executable(TESTint src/main.cpp include/tested.h src/tested.cpp)
