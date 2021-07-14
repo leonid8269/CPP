@@ -30,7 +30,7 @@ int main() {
     }while(true);
 
     std::cout << "Bye! Bye!\n";
-    std::cout << "To continue, press ENTER\n";
+    std::cout << "Press ENTER\n";
     getch();
 
     return 0;
