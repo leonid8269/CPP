@@ -1,5 +1,6 @@
 #pragma once
+#include "iostream"
 
-void sum (   ){
+extern int buf[8];
 
-}
+void print(int buf);

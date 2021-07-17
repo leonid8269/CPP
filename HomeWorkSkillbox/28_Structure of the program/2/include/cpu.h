@@ -1,6 +1,5 @@
 #pragma once
 #include <iostream>
 
-
-int64_t compute ();
+void compute (const int64_t buf[8]);
 

@@ -1,8 +1,7 @@
 #include "../include/gpu.h"
 #include "../include/ram.h"
-#include <iostream>
 
-void output(){
+void output (){
+    for(int8_t i = 0 ; i < 8 ; ++i) std::cout << buffer[i] << std::endl;
 
-    std::cout << buffer;
 }
